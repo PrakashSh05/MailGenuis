@@ -178,6 +178,8 @@ export default function ProfilePage() {
                 />
                 <button
                   type="button"
+                  title="Toggle password visibility"
+                  aria-label="Toggle password visibility"
                   className="absolute right-3 top-[34px] text-text-secondary hover:text-brand"
                   onClick={() => setShowCurrentPassword(!showCurrentPassword)}
                 >
@@ -195,6 +197,8 @@ export default function ProfilePage() {
                 />
                 <button
                   type="button"
+                  title="Toggle password visibility"
+                  aria-label="Toggle password visibility"
                   className="absolute right-3 top-[34px] text-text-secondary hover:text-brand"
                   onClick={() => setShowNewPassword(!showNewPassword)}
                 >

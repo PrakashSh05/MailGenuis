@@ -72,7 +72,7 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto w-full h-[calc(100vh-8rem)] flex flex-col relative gap-4 pb-4">
+    <div className="max-w-7xl mx-auto w-full min-h-[calc(100vh-8rem)] flex flex-col relative gap-4 pb-4">
       <div className="shrink-0">
         <PageHeader
           title="Command Center"
@@ -92,7 +92,7 @@ export default function DashboardPage() {
         )}
 
         {/* Statistics Cards Grid */}
-        <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
           {loading ? (
             Array.from({ length: 5 }).map((_, i) => (
               <Card key={`stat-skel-${i}`} className="p-6 bg-white/80 dark:bg-[#0a0a0a]/80 backdrop-blur-md border border-black/10 dark:border-white/10 rounded-2xl">
@@ -122,9 +122,9 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 flex-1 min-h-0">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 flex-1">
         {/* Left Column: Analytics & Quick Actions */}
-        <div className="lg:col-span-1 flex flex-col gap-4 overflow-y-auto custom-scrollbar pr-2">
+        <div className="lg:col-span-1 flex flex-col gap-4 lg:overflow-y-auto custom-scrollbar lg:pr-2">
           <Card className="shrink-0 flex flex-col bg-white/80 dark:bg-[#0a0a0a]/80 backdrop-blur-md border-border hover:border-brand/50 transition-colors duration-500">
             <h3 className="text-lg font-display font-bold text-gray-900 dark:text-white mb-4 uppercase tracking-widest flex items-center gap-2 shrink-0">
               <Sparkles className="h-5 w-5 text-brand" /> System Preferences
@@ -190,7 +190,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Right Column: Activity Timeline */}
-        <div className="lg:col-span-2 flex flex-col min-h-0">
+        <div className="lg:col-span-2 flex flex-col h-[500px] lg:h-auto lg:min-h-0">
           <Card className="flex-1 flex flex-col min-h-0 bg-white/80 dark:bg-[#0a0a0a]/80 backdrop-blur-md border-border hover:border-brand/30 transition-colors duration-500 relative overflow-hidden">
             {/* Grid overlay for HUD effect */}
             <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.02)_1px,transparent_1px)] dark:bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),dark:linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:30px_30px] pointer-events-none opacity-50 z-0"></div>

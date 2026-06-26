@@ -69,7 +69,7 @@ export default function LoginPage() {
         </form>
 
         <div className="text-center mt-8 pt-6 border-t border-editorial-border/80 text-sm text-editorial-secondary">
-          New to Mail-Genius?{' '}
+          New to MailZap?{' '}
           <Link to="/register" className="text-brand-400 hover:text-brand-300 font-semibold">
             Create an account
           </Link>

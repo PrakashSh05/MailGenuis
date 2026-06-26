@@ -1,5 +1,5 @@
 import React from 'react';
-import { Menu } from 'lucide-react';
+import { Menu, Zap } from 'lucide-react';
 
 export default function Navbar({ onToggleSidebar }) {
   return (
@@ -12,7 +12,12 @@ export default function Navbar({ onToggleSidebar }) {
         >
           <Menu className="h-6 w-6" />
         </button>
-        <span className="text-lg font-display font-bold text-white tracking-widest uppercase">Mail-Genius</span>
+        <div className="flex items-center gap-2">
+          <div className="p-1.5 rounded-lg bg-brand/10 border border-brand/20 shadow-glow-orange">
+            <Zap className="h-5 w-5 text-brand" />
+          </div>
+          <span className="text-lg font-display font-bold text-white tracking-widest uppercase">MailZap</span>
+        </div>
       </div>
     </header>
   );

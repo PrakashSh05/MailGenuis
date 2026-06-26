@@ -21,7 +21,7 @@ export default function Layout() {
         <Navbar onToggleSidebar={() => setSidebarOpen(true)} />
 
         {/* Content Body Container */}
-        <main className="flex-1 p-6 md:p-8 pt-24 md:pt-8 max-w-7xl w-full mx-auto flex flex-col relative">
+        <main className="flex-1 p-4 md:p-8 pt-24 md:pt-8 max-w-7xl w-full mx-auto flex flex-col relative">
           <Outlet />
         </main>
 

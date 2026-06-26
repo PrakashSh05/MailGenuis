@@ -21,7 +21,7 @@ export default function PageHeader({ title, subtitle, children }) {
       
       {/* Left side: Title */}
       <div>
-        <h1 className="text-3xl md:text-4xl font-display font-bold text-gray-900 dark:text-white tracking-widest uppercase">
+        <h1 className="text-2xl md:text-4xl font-display font-bold text-gray-900 dark:text-white tracking-widest uppercase">
           {title}
         </h1>
         {subtitle && (
