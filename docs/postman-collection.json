@@ -1,0 +1,259 @@
+{
+  "info": {
+    "name": "AI Email Generator",
+    "_postman_id": "ai-email-generator-collection",
+    "description": "Complete API collection for the AI Email Generator application.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8080", "type": "string" },
+    { "key": "token", "value": "", "type": "string" }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/auth/register", "host": ["{{baseUrl}}"], "path": ["api", "v1", "auth", "register"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"password123\",\n  \"fullName\": \"Test User\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": ["var jsonData = pm.response.json();", "if (jsonData.data && jsonData.data.token) {", "  pm.collectionVariables.set('token', jsonData.data.token);", "}"]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/auth/login", "host": ["{{baseUrl}}"], "path": ["api", "v1", "auth", "login"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"password123\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": ["var jsonData = pm.response.json();", "if (jsonData.data && jsonData.data.token) {", "  pm.collectionVariables.set('token', jsonData.data.token);", "}"]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Dashboard",
+      "item": [
+        {
+          "name": "Get Dashboard Summary",
+          "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/v1/dashboard", "host": ["{{baseUrl}}"], "path": ["api", "v1", "dashboard"] } }
+        },
+        {
+          "name": "Get Statistics",
+          "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/v1/dashboard/statistics", "host": ["{{baseUrl}}"], "path": ["api", "v1", "dashboard", "statistics"] } }
+        },
+        {
+          "name": "Get Recent Activity",
+          "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/v1/dashboard/activity", "host": ["{{baseUrl}}"], "path": ["api", "v1", "dashboard", "activity"] } }
+        }
+      ]
+    },
+    {
+      "name": "Email",
+      "item": [
+        {
+          "name": "Generate Email",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/emails/generate", "host": ["{{baseUrl}}"], "path": ["api", "v1", "emails", "generate"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"purpose\": \"Request a meeting to discuss Q3 results\",\n  \"recipient\": \"manager@company.com\",\n  \"tone\": \"PROFESSIONAL\",\n  \"length\": \"MEDIUM\",\n  \"language\": \"ENGLISH\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Apply Action",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/emails/action", "host": ["{{baseUrl}}"], "path": ["api", "v1", "emails", "action"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"actionType\": \"IMPROVE\",\n  \"currentSubject\": \"Meeting Request\",\n  \"currentBody\": \"Hi, can we meet to discuss Q3?\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Save Email",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/emails", "host": ["{{baseUrl}}"], "path": ["api", "v1", "emails"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"subject\": \"Q3 Review Meeting\",\n  \"body\": \"Dear Manager, I would like to schedule a meeting...\",\n  \"tone\": \"PROFESSIONAL\",\n  \"length\": \"MEDIUM\",\n  \"language\": \"ENGLISH\",\n  \"purpose\": \"Meeting request\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Get Email History",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/emails?page=0&size=10&sortBy=createdAt",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "emails"],
+              "query": [
+                { "key": "page", "value": "0" },
+                { "key": "size", "value": "10" },
+                { "key": "sortBy", "value": "createdAt" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Email by ID",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/v1/emails/{{emailId}}", "host": ["{{baseUrl}}"], "path": ["api", "v1", "emails", "{{emailId}}"] }
+          }
+        },
+        {
+          "name": "Toggle Favorite",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/emails/{{emailId}}/favorite", "host": ["{{baseUrl}}"], "path": ["api", "v1", "emails", "{{emailId}}", "favorite"] },
+            "body": { "mode": "raw", "raw": "{\n  \"isFavorite\": true\n}" }
+          }
+        },
+        {
+          "name": "Delete Email",
+          "request": {
+            "method": "DELETE",
+            "url": { "raw": "{{baseUrl}}/api/v1/emails/{{emailId}}", "host": ["{{baseUrl}}"], "path": ["api", "v1", "emails", "{{emailId}}"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Templates",
+      "item": [
+        {
+          "name": "Get Prompt Library",
+          "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/v1/templates/library", "host": ["{{baseUrl}}"], "path": ["api", "v1", "templates", "library"] } }
+        },
+        {
+          "name": "Get Library Categories",
+          "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/v1/templates/library/categories", "host": ["{{baseUrl}}"], "path": ["api", "v1", "templates", "library", "categories"] } }
+        },
+        {
+          "name": "Get Library Item by ID",
+          "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/v1/templates/library/{{promptId}}", "host": ["{{baseUrl}}"], "path": ["api", "v1", "templates", "library", "{{promptId}}"] } }
+        },
+        {
+          "name": "Create Template",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/templates", "host": ["{{baseUrl}}"], "path": ["api", "v1", "templates"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Weekly Update\",\n  \"tone\": \"PROFESSIONAL\",\n  \"promptTemplate\": \"Write a weekly status update email covering accomplishments and blockers.\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Get User Templates",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/templates?page=0&size=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "templates"],
+              "query": [
+                { "key": "page", "value": "0" },
+                { "key": "size", "value": "10" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Template",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/templates/{{templateId}}", "host": ["{{baseUrl}}"], "path": ["api", "v1", "templates", "{{templateId}}"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Weekly Update\",\n  \"tone\": \"CASUAL\",\n  \"promptTemplate\": \"Write a casual weekly status email.\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete Template",
+          "request": {
+            "method": "DELETE",
+            "url": { "raw": "{{baseUrl}}/api/v1/templates/{{templateId}}", "host": ["{{baseUrl}}"], "path": ["api", "v1", "templates", "{{templateId}}"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Profile",
+      "item": [
+        {
+          "name": "Get Profile",
+          "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/v1/profile", "host": ["{{baseUrl}}"], "path": ["api", "v1", "profile"] } }
+        },
+        {
+          "name": "Update Profile",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/profile", "host": ["{{baseUrl}}"], "path": ["api", "v1", "profile"] },
+            "body": { "mode": "raw", "raw": "{\n  \"fullName\": \"Updated Name\",\n  \"profilePictureUrl\": \"https://example.com/avatar.jpg\"\n}" }
+          }
+        },
+        {
+          "name": "Change Password",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/profile/password", "host": ["{{baseUrl}}"], "path": ["api", "v1", "profile", "password"] },
+            "body": { "mode": "raw", "raw": "{\n  \"currentPassword\": \"password123\",\n  \"newPassword\": \"newPassword456\",\n  \"confirmPassword\": \"newPassword456\"\n}" }
+          }
+        },
+        {
+          "name": "Update Settings",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/profile/settings", "host": ["{{baseUrl}}"], "path": ["api", "v1", "profile", "settings"] },
+            "body": { "mode": "raw", "raw": "{\n  \"defaultTone\": \"FRIENDLY\",\n  \"defaultLanguage\": \"ENGLISH\",\n  \"defaultEmailLength\": \"MEDIUM\",\n  \"darkModeEnabled\": true,\n  \"themePreference\": \"dark\"\n}" }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,82 @@
+[
+  {
+    "id": "hr-leave-request",
+    "category": "HR",
+    "title": "Leave Request",
+    "description": "Request vacation, sick leave, or personal time off from your manager.",
+    "purpose": "Request leave from work starting [start date] to [end date] due to [reason]",
+    "defaultTone": "FORMAL",
+    "defaultLength": "SHORT",
+    "prompt": "Write a request for time off."
+  },
+  {
+    "id": "hr-resignation",
+    "category": "HR",
+    "title": "Resignation Letter",
+    "description": "A formal notice of resignation to submit to your supervisor.",
+    "purpose": "Formally resign from my position as [Title] with my last day being [Date]",
+    "defaultTone": "FORMAL",
+    "defaultLength": "MEDIUM",
+    "prompt": "Write a formal resignation notice."
+  },
+  {
+    "id": "business-meeting",
+    "category": "Business",
+    "title": "Meeting Request",
+    "description": "Schedule a sync or project discussion with clients or team members.",
+    "purpose": "Schedule a 30-minute sync to discuss the project milestones",
+    "defaultTone": "PROFESSIONAL",
+    "defaultLength": "SHORT",
+    "prompt": "Request a sync calendar invite."
+  },
+  {
+    "id": "business-proposal",
+    "category": "Business",
+    "title": "Client Proposal Follow-up",
+    "description": "Follow up with a prospective client regarding a sent project proposal.",
+    "purpose": "Follow up on the proposal sent last week and check if they have any questions",
+    "defaultTone": "PROFESSIONAL",
+    "defaultLength": "MEDIUM",
+    "prompt": "Write a follow-up proposal email."
+  },
+  {
+    "id": "education-extension",
+    "category": "Education",
+    "title": "Assignment Extension",
+    "description": "Request a deadline extension on an assignment from your professor.",
+    "purpose": "Request a 3-day extension on the homework assignment due to unexpected sickness",
+    "defaultTone": "FORMAL",
+    "defaultLength": "SHORT",
+    "prompt": "Write an assignment extension request."
+  },
+  {
+    "id": "personal-invitation",
+    "category": "Personal",
+    "title": "Event Invitation",
+    "description": "Invite friends, family, or colleagues to a celebration or party.",
+    "purpose": "Invite colleagues to celebrate my birthday next Friday at 6 PM",
+    "defaultTone": "FRIENDLY",
+    "defaultLength": "SHORT",
+    "prompt": "Write an event invitation."
+  },
+  {
+    "id": "support-refund",
+    "category": "Customer Support",
+    "title": "Refund Request Response",
+    "description": "Respond to a customer asking for a refund for a product or service.",
+    "purpose": "Approve refund request for customer order [order number] due to [reason]",
+    "defaultTone": "APOLOGETIC",
+    "defaultLength": "MEDIUM",
+    "prompt": "Write a polite refund approval email."
+  },
+  {
+    "id": "marketing-launch",
+    "category": "Marketing",
+    "title": "Product Launch Announcement",
+    "description": "Announce the release of a new feature or product to your email list.",
+    "purpose": "Announce the launch of our new product [product name] offering a [discount]% discount",
+    "defaultTone": "PERSUASIVE",
+    "defaultLength": "LONG",
+    "prompt": "Write a promotional email for a new product launch."
+  }
+]
