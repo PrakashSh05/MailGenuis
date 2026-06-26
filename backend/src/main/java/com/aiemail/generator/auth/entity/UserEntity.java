@@ -59,9 +59,6 @@ public class UserEntity {
     @ToString.Include
     private String fullName;
 
-    @Column(name = "profile_picture_url")
-    private String profilePictureUrl;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
     @Builder.Default

@@ -5,57 +5,57 @@ import { Mail, Star, FileText, User } from 'lucide-react';
 const getActivityIcon = (type) => {
   switch (type) {
     case 'EMAIL_GENERATED':
-      return <Mail className="h-4 w-4 text-brand-600 dark:text-brand-400" />;
+      return <Mail className="h-4 w-4 text-brand" />;
     case 'EMAIL_SAVED':
-      return <Star className="h-4 w-4 text-accent dark:text-accent" />;
+      return <Star className="h-4 w-4 text-accent" />;
     case 'TEMPLATE_CREATED':
-      return <FileText className="h-4 w-4 text-blue-600 dark:text-blue-400" />;
+      return <FileText className="h-4 w-4 text-gray-900 dark:text-white" />;
     case 'PROFILE_UPDATED':
-      return <User className="h-4 w-4 text-success dark:text-success" />;
+      return <User className="h-4 w-4 text-success" />;
     default:
-      return <div className="h-2 w-2 rounded-full bg-slate-400" />;
+      return <div className="h-2 w-2 rounded-full bg-black/50 dark:bg-white/50" />;
   }
 };
 
 const getActivityBg = (type) => {
   switch (type) {
-    case 'EMAIL_GENERATED': return 'bg-brand-50 dark:bg-brand-900/20 border-brand-200 dark:border-brand-800';
-    case 'EMAIL_SAVED': return 'bg-yellow-50 dark:bg-yellow-900/20 border-yellow-200 dark:border-yellow-800';
-    case 'TEMPLATE_CREATED': return 'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800';
-    case 'PROFILE_UPDATED': return 'bg-emerald-50 dark:bg-emerald-900/20 border-emerald-200 dark:border-emerald-800';
-    default: return 'bg-warm-secondary dark:bg-slate-800 border-editorial-border dark:border-editorial-border';
+    case 'EMAIL_GENERATED': return 'bg-brand/10 border-brand/30 shadow-[inset_0_0_10px_rgba(255,87,34,0.1)]';
+    case 'EMAIL_SAVED': return 'bg-accent/10 border-accent/30 shadow-[inset_0_0_10px_rgba(230,81,0,0.1)]';
+    case 'TEMPLATE_CREATED': return 'bg-black/5 dark:bg-white/5 border-black/20 dark:border-white/20 shadow-[inset_0_0_10px_rgba(0,0,0,0.05)] dark:shadow-[inset_0_0_10px_rgba(255,255,255,0.05)]';
+    case 'PROFILE_UPDATED': return 'bg-success/10 border-success/30 shadow-[inset_0_0_10px_rgba(74,222,128,0.1)]';
+    default: return 'bg-black/5 dark:bg-white/5 border-black/10 dark:border-white/10';
   }
 };
 
 export default function ActivityTimeline({ activities = [] }) {
   if (!activities || activities.length === 0) {
     return (
-      <div className="text-center py-8 text-sm text-editorial-secondary dark:text-editorial-secondary">
+      <div className="text-center py-8 text-sm text-text-secondary font-mono uppercase tracking-wider">
         No recent activity found.
       </div>
     );
   }
 
   return (
-    <div className="relative border-l border-editorial-border dark:border-editorial-border ml-3">
-      <ul className="space-y-6">
+    <div className="relative border-l border-black/10 dark:border-white/10 ml-6">
+      <ul className="space-y-6 py-4">
         {activities.map((activity, index) => (
           <li key={index} className="relative pl-6">
             <span 
-              className={`absolute -left-[1.125rem] top-0.5 flex h-9 w-9 items-center justify-center rounded-full border-2 bg-warm-primary dark:bg-warm-secondary ${getActivityBg(activity.type)}`}
+              className={`absolute -left-[1.125rem] top-0.5 flex h-9 w-9 items-center justify-center rounded-full border ${getActivityBg(activity.type)} bg-white dark:bg-[#0a0a0a]`}
             >
               {getActivityIcon(activity.type)}
             </span>
             <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between pt-1.5">
-              <p className="text-sm font-medium text-editorial-primary dark:text-editorial-primary">
+              <p className="text-sm font-semibold text-gray-900 dark:text-white">
                 {activity.description}
               </p>
-              <time className="text-xs text-editorial-secondary dark:text-editorial-secondary mt-1 sm:mt-0">
+              <time className="text-xs font-mono text-text-secondary mt-1 sm:mt-0 uppercase tracking-widest">
                 {formatRelativeTime(activity.timestamp)}
               </time>
             </div>
             {activity.details && (
-              <p className="text-sm text-editorial-secondary dark:text-editorial-secondary mt-1">
+              <p className="text-sm font-mono text-text-secondary mt-2 border-l-2 border-black/10 dark:border-white/10 pl-3 py-1">
                 {activity.details}
               </p>
             )}

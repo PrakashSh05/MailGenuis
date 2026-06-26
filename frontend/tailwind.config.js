@@ -30,6 +30,18 @@ export default {
           DEFAULT: 'var(--success)',
           500: 'var(--success)',
         }
+      },
+      fontFamily: {
+        sans: ['Outfit', 'sans-serif'],
+        display: ['Space Grotesk', 'sans-serif'],
+      },
+      boxShadow: {
+        'glow-orange': '0 0 15px rgba(255, 87, 34, 0.3)',
+        'glow-orange-lg': '0 0 25px rgba(255, 87, 34, 0.5)',
+        'glass': '0 4px 30px rgba(0, 0, 0, 0.5)',
+      },
+      backgroundImage: {
+        'glass-gradient': 'linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%)',
       }
     },
   },

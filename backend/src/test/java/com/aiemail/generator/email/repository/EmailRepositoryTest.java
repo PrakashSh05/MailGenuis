@@ -46,7 +46,7 @@ class EmailRepositoryTest {
                 .language(Language.ENGLISH)
                 .subject("Urgent: Sync request")
                 .body("Hello, let's sync today.")
-                .isFavorite(true)
+                .favorite(true)
                 .build();
 
         EmailEntity email2 = EmailEntity.builder()
@@ -58,7 +58,7 @@ class EmailRepositoryTest {
                 .language(Language.ENGLISH)
                 .subject("Sick leave notice")
                 .body("I am feeling unwell today.")
-                .isFavorite(false)
+                .favorite(false)
                 .build();
 
         emailRepository.save(email1);
@@ -68,8 +68,8 @@ class EmailRepositoryTest {
         Page<EmailEntity> page = emailRepository.findByUser(user, PageRequest.of(0, 10));
         assertEquals(2, page.getTotalElements());
 
-        // Find by user and isFavorite
-        Page<EmailEntity> favPage = emailRepository.findByUserAndIsFavorite(user, true, PageRequest.of(0, 10));
+        // Find by user and favorite
+        Page<EmailEntity> favPage = emailRepository.findByUserAndFavorite(user, true, PageRequest.of(0, 10));
         assertEquals(1, favPage.getTotalElements());
         assertEquals("Urgent: Sync request", favPage.getContent().get(0).getSubject());
 

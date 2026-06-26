@@ -29,8 +29,8 @@ export const emailService = {
     return response.data;
   },
 
-  toggleFavorite: async (id) => {
-    const response = await api.patch(`/api/v1/emails/${id}/favorite`);
+  toggleFavorite: async (id, isFavorite) => {
+    const response = await api.patch(`/api/v1/emails/${id}/favorite`, { isFavorite });
     return response.data;
   },
 

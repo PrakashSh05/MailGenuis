@@ -48,7 +48,7 @@ class DashboardServiceTest {
     void getStatistics_returnsAllCards() {
         when(emailRepository.countByUser(user)).thenReturn(50L);
         when(emailRepository.countByUserAndCreatedAtAfter(eq(user), any())).thenReturn(5L);
-        when(emailRepository.countByUserAndIsFavorite(user, true)).thenReturn(10L);
+        when(emailRepository.countByUserAndFavorite(user, true)).thenReturn(10L);
         when(templateRepository.countByUser(user)).thenReturn(3L);
 
         List<StatisticsCard> cards = dashboardService.getStatistics(user);
@@ -80,7 +80,7 @@ class DashboardServiceTest {
     void getDashboardSummary_returnsFullResponse() {
         when(emailRepository.countByUser(user)).thenReturn(10L);
         when(emailRepository.countByUserAndCreatedAtAfter(eq(user), any())).thenReturn(2L);
-        when(emailRepository.countByUserAndIsFavorite(user, true)).thenReturn(1L);
+        when(emailRepository.countByUserAndFavorite(user, true)).thenReturn(1L);
         when(templateRepository.countByUser(user)).thenReturn(0L);
         when(emailRepository.findMostUsedTone(eq(user), any(Pageable.class))).thenReturn(List.of(Tone.PROFESSIONAL));
         when(emailRepository.findMostUsedLanguage(eq(user), any(Pageable.class))).thenReturn(List.of(Language.ENGLISH));

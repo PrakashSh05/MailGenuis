@@ -172,7 +172,7 @@ export default function TemplatesPage() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto space-y-6 flex flex-col h-full min-h-[calc(100vh-8rem)]">
+    <div className="w-full space-y-6 flex flex-col flex-1">
       <PageHeader 
         title="Templates & Library" 
         description="Browse predefined system prompts or manage your own custom reusable structures."
@@ -185,9 +185,12 @@ export default function TemplatesPage() {
         }
       />
 
-      <div className="bg-warm-primary dark:bg-warm-primary rounded-xl shadow-sm border border-editorial-border dark:border-editorial-border p-4 sm:p-6 flex-1 flex flex-col">
+      <div className="bg-white/80 dark:bg-[#0a0a0a]/80 backdrop-blur-md rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.05)] dark:shadow-glass border border-black/10 dark:border-white/10 p-4 sm:p-6 flex-1 flex flex-col min-h-0 relative overflow-hidden">
+        {/* HUD Grid Overlay */}
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.02)_1px,transparent_1px)] dark:bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),dark:linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:30px_30px] pointer-events-none opacity-50 z-0"></div>
+        <div className="relative z-10 flex flex-col h-full">
         {/* Tabs */}
-        <div className="border-b border-editorial-border dark:border-editorial-border mb-6">
+        <div className="border-b border-editorial-border dark:border-editorial-border mb-6 shrink-0">
           <nav className="-mb-px flex space-x-8" aria-label="Tabs">
             <button
               onClick={() => setActiveTab('library')}
@@ -214,92 +217,97 @@ export default function TemplatesPage() {
           </nav>
         </div>
 
-        {/* Tab Content: Prompt Library */}
-        {activeTab === 'library' && (
-          <div className="flex-1">
-            {libraryLoading ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {Array.from({ length: 6 }).map((_, i) => (
-                  <div key={i} className="border border-editorial-border dark:border-editorial-border rounded-xl p-5"><Skeleton className="h-24 w-full" /></div>
-                ))}
-              </div>
-            ) : (
-              <div className="space-y-8">
-                {libraryData.map(category => (
-                  <div key={category.category}>
-                    <h3 className="text-lg font-bold text-editorial-primary dark:text-editorial-primary mb-4 border-b border-slate-100 dark:border-editorial-border pb-2">
-                      {category.category}
-                    </h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
-                      {category.items.map(item => (
-                        <PromptCard 
-                          key={item.id} 
-                          prompt={item} 
-                          onPreview={setPreviewPrompt} 
-                          onUse={handleUsePrompt} 
-                        />
-                      ))}
+        <div className="flex-1 flex flex-col min-h-0 mb-4">
+          {/* Tab Content: Prompt Library */}
+          {activeTab === 'library' && (
+            <div className="flex-1 overflow-y-auto custom-scrollbar pr-2">
+              {libraryLoading ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {Array.from({ length: 6 }).map((_, i) => (
+                    <div key={i} className="border border-editorial-border dark:border-editorial-border rounded-xl p-5"><Skeleton className="h-24 w-full" /></div>
+                  ))}
+                </div>
+              ) : (
+                <div className="space-y-8">
+                  {libraryData.map(category => (
+                    <div key={category.category}>
+                      <h3 className="text-lg font-bold text-editorial-primary dark:text-editorial-primary mb-4 border-b border-slate-100 dark:border-editorial-border pb-2">
+                        {category.category}
+                      </h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
+                        {category.items.map(item => (
+                          <PromptCard 
+                            key={item.id} 
+                            prompt={item} 
+                            onPreview={setPreviewPrompt} 
+                            onUse={handleUsePrompt} 
+                          />
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Tab Content: My Templates */}
-        {activeTab === 'custom' && (
-          <div className="flex-1 flex flex-col">
-            <div className="mb-6 space-y-4">
-              <SearchBar onSearch={handleSearch} placeholder="Search your templates..." />
-              <FilterPanel activeFilter={activeFilter} onFilterChange={handleFilterChange} />
+                  ))}
+                </div>
+              )}
             </div>
+          )}
 
-            {templatesLoading && (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
-                {Array.from({ length: 3 }).map((_, i) => (
-                  <div key={i} className="border border-editorial-border dark:border-editorial-border rounded-xl p-5"><Skeleton className="h-32 w-full" /></div>
-                ))}
+          {/* Tab Content: My Templates */}
+          {activeTab === 'custom' && (
+            <div className="flex-1 flex flex-col h-full">
+              <div className="mb-6 space-y-4 shrink-0">
+                <SearchBar onSearch={handleSearch} placeholder="Search your templates..." />
+                <FilterPanel activeFilter={activeFilter} onFilterChange={handleFilterChange} showFavorites={false} />
               </div>
-            )}
 
-            {!templatesLoading && templates.length === 0 && (
-              <div className="flex-1 flex items-center justify-center py-12">
-                <EmptyState
-                  icon={search || activeFilter ? SearchX : Layers}
-                  title={search || activeFilter ? "No matches found" : "No custom templates yet"}
-                  description={search || activeFilter ? "Try adjusting your search terms or filters." : "Create a reusable template for your frequent email structures."}
-                  action={(!search && !activeFilter) ? { label: 'Create Template', onClick: handleCreateNew } : null}
+              <div className="flex-1 overflow-y-auto custom-scrollbar pr-2 min-h-0">
+                {templatesLoading && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+                    {Array.from({ length: 3 }).map((_, i) => (
+                      <div key={i} className="border border-editorial-border dark:border-editorial-border rounded-xl p-5"><Skeleton className="h-32 w-full" /></div>
+                    ))}
+                  </div>
+                )}
+
+                {!templatesLoading && templates.length === 0 && (
+                  <div className="flex-1 flex items-center justify-center py-12">
+                    <EmptyState
+                      icon={search || activeFilter ? SearchX : Layers}
+                      title={search || activeFilter ? "No matches found" : "No custom templates yet"}
+                      description={search || activeFilter ? "Try adjusting your search terms or filters." : "Create a reusable template for your frequent email structures."}
+                      action={(!search && !activeFilter) ? { label: 'Create Template', onClick: handleCreateNew } : null}
+                    />
+                  </div>
+                )}
+
+                {!templatesLoading && templates.length > 0 && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6 items-stretch">
+                    {templates.map(template => (
+                      <TemplateCard
+                        key={template.id}
+                        template={template}
+                        onEdit={handleEdit}
+                        onDelete={setDeletingTemplate}
+                        onUse={handleUseTemplate}
+                      />
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <div className="mt-auto relative z-10 pt-4 border-t border-black/10 dark:border-white/10 shrink-0">
+                <Pagination 
+                  currentPage={page} 
+                  totalPages={totalPages} 
+                  onPageChange={setPage} 
                 />
               </div>
-            )}
-
-            {!templatesLoading && templates.length > 0 && (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6 items-stretch">
-                {templates.map(template => (
-                  <TemplateCard
-                    key={template.id}
-                    template={template}
-                    onEdit={handleEdit}
-                    onDelete={setDeletingTemplate}
-                    onUse={handleUseTemplate}
-                  />
-                ))}
-              </div>
-            )}
-
-            <div className="mt-auto">
-              <Pagination 
-                currentPage={page} 
-                totalPages={totalPages} 
-                onPageChange={setPage} 
-              />
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
+    </div>
 
-      {/* Library Prompt Preview Modal */}
+    {/* Library Prompt Preview Modal */}
       <Modal
         isOpen={!!previewPrompt}
         onClose={() => setPreviewPrompt(null)}

@@ -28,7 +28,7 @@ export default function EmailCard({
           {email.subject}
         </h3>
         <p className="text-sm text-editorial-secondary dark:text-editorial-secondary line-clamp-3 font-serif">
-          {email.body}
+          {email.purpose || 'Custom email generation'}
         </p>
       </div>
 
@@ -38,12 +38,12 @@ export default function EmailCard({
             isFavorite={email.isFavorite} 
             onClick={() => onToggleFavorite(email.id, email.isFavorite)} 
           />
-          <CopyButton text={`${email.subject}\n\n${email.body}`} />
         </div>
         <div className="flex items-center gap-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
           <Button variant="ghost" size="sm" onClick={() => onView(email)} title="View full email" className="px-2">
             <Eye className="h-4 w-4 text-editorial-secondary" />
           </Button>
+
           <Button variant="ghost" size="sm" onClick={() => onRegenerate(email)} title="Regenerate from this" className="px-2">
             <RefreshCw className="h-4 w-4 text-brand-500" />
           </Button>

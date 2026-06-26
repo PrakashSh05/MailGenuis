@@ -68,7 +68,7 @@ public class EmailServiceImpl implements EmailService {
                 .modelUsed(groqConfig.getModel())
                 .generationTimeMs((int) duration)
                 .isSaved(false)
-                .isFavorite(false)
+                .favorite(false)
                 .build();
     }
 
@@ -92,7 +92,7 @@ public class EmailServiceImpl implements EmailService {
                 .modelUsed(groqConfig.getModel())
                 .generationTimeMs((int) duration)
                 .isSaved(false)
-                .isFavorite(false)
+                .favorite(false)
                 .build();
     }
 
@@ -102,6 +102,7 @@ public class EmailServiceImpl implements EmailService {
         EmailEntity emailEntity = emailMapper.saveEmailRequestToEmailEntity(request);
         emailEntity.setUser(user);
         emailEntity.setSaved(true);
+        emailEntity.setFavorite(request.getFavorite() != null ? request.getFavorite() : false);
         emailEntity.setModelUsed(groqConfig.getModel());
 
         EmailEntity savedEntity = emailRepository.save(emailEntity);
@@ -126,7 +127,7 @@ public class EmailServiceImpl implements EmailService {
             if (tone != null) {
                 emailPage = emailRepository.findByUserAndTone(user, tone, pageable);
             } else if (Boolean.TRUE.equals(isFavorite)) {
-                emailPage = emailRepository.findByUserAndIsFavorite(user, true, pageable);
+                emailPage = emailRepository.findByUserAndFavorite(user, true, pageable);
             } else {
                 emailPage = emailRepository.findByUser(user, pageable);
             }
@@ -161,7 +162,7 @@ public class EmailServiceImpl implements EmailService {
         EmailEntity entity = emailRepository.findByIdAndUser(id, user)
                 .orElseThrow(() -> new ResourceNotFoundException("Email log not found with id: " + id));
 
-        entity.setFavorite(request.getIsFavorite());
+        entity.setFavorite(request.getFavorite());
         EmailEntity saved = emailRepository.save(entity);
         return emailMapper.emailEntityToEmailResponse(saved);
     }

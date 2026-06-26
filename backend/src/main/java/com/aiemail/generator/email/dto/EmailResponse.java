@@ -28,6 +28,7 @@ public class EmailResponse {
     private String modelUsed;
     private Integer generationTimeMs;
     private boolean isSaved;
-    private boolean isFavorite;
+    @com.fasterxml.jackson.annotation.JsonProperty("isFavorite")
+    private boolean favorite;
     private LocalDateTime createdAt;
 }
