@@ -326,12 +326,5 @@ npm run test
 
 This project is licensed under the **MIT License**.
 
----
-
-## 👤 Contributors
-
-- **Your Name** — Full-Stack Developer
-
----
 
 > Built with ❤️ using Spring Boot, React, and Google Gemini AI
