@@ -12,7 +12,7 @@ export default function Button({
   onClick,
   ...props
 }) {
-  const baseStyle = 'inline-flex items-center justify-center font-display font-bold uppercase tracking-widest rounded-xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#050505] disabled:opacity-50 disabled:cursor-not-allowed select-none relative group overflow-hidden active:scale-95';
+  const baseStyle = 'inline-flex items-center justify-center font-display font-bold uppercase tracking-widest rounded-xl transition-all duration-300 active:duration-75 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#050505] disabled:opacity-50 disabled:cursor-not-allowed select-none relative group overflow-hidden active:scale-95';
   
   const variants = {
     primary: 'bg-brand hover:bg-brand/90 text-black focus:ring-brand border border-transparent shadow-[0_0_20px_rgba(255,87,34,0.3)] hover:shadow-[0_0_40px_rgba(255,87,34,0.6)] hover:-translate-y-1 hover:scale-[1.02]',

@@ -1,8 +1,25 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, Sparkles, History, FileText, Settings, User, Mail, X, Zap } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
+import { LayoutDashboard, Sparkles, History, FileText, Settings, User, Mail, X, Zap, LogOut } from 'lucide-react';
 
 export default function Sidebar({ isOpen, onClose }) {
+  const { logout } = useAuth();
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
+
+  useEffect(() => {
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+    
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+    
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
+
   const menuItems = [
     { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
     { name: 'Generate Email', path: '/generate', icon: Sparkles },
@@ -31,7 +48,7 @@ export default function Sidebar({ isOpen, onClose }) {
             <div className="p-2 rounded-xl bg-brand/10 border border-brand/20 shadow-glow-orange">
               <Zap className="h-5 w-5 text-brand" />
             </div>
-            <span className="font-display font-bold text-xl text-gray-900 dark:text-white tracking-widest uppercase whitespace-nowrap">Mail-Genius</span>
+            <span className="font-display font-bold text-xl text-gray-900 dark:text-white tracking-widest uppercase whitespace-nowrap">MailZap</span>
           </div>
           <button onClick={onClose} className="md:hidden text-text-secondary p-1.5 hover:text-brand rounded-lg transition-colors" aria-label="Close Sidebar">
             <X className="h-6 w-6" />
@@ -47,7 +64,7 @@ export default function Sidebar({ isOpen, onClose }) {
                 key={item.name}
                 to={item.path}
                 onClick={onClose}
-                className={({ isActive }) => `flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300 relative overflow-hidden group hover:scale-[1.02] hover:translate-x-1 ${
+                className={({ isActive }) => `flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300 active:duration-75 relative overflow-hidden group hover:scale-[1.02] active:scale-95 hover:translate-x-1 ${
                   isActive 
                     ? 'text-brand bg-brand/10 border border-brand/30 shadow-[inset_0_0_20px_rgba(255,87,34,0.1)]' 
                     : 'text-text-secondary hover:text-gray-900 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5 border border-transparent hover:border-black/10 dark:hover:border-white/10'
@@ -65,13 +82,27 @@ export default function Sidebar({ isOpen, onClose }) {
               </NavLink>
             );
           })}
+          
+          <button
+            onClick={logout}
+            className="md:hidden w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300 active:duration-75 relative overflow-hidden group text-red-500 hover:bg-red-500/10 active:bg-red-500/20 active:scale-95 border border-transparent hover:border-red-500/20"
+          >
+            <LogOut className="h-5 w-5" />
+            <span className="relative z-10">Disconnect</span>
+          </button>
         </nav>
         
         {/* Futuristic bottom accent */}
         <div className="p-4 border-t border-border/50">
           <div className="px-4 py-3 rounded-xl bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/5 flex items-center gap-3">
-            <div className="h-2 w-2 rounded-full bg-success shadow-[0_0_10px_rgba(74,222,128,0.8)] animate-pulse"></div>
-            <span className="text-xs font-mono text-text-secondary uppercase tracking-wider">System Online</span>
+            <div className={`h-2 w-2 rounded-full animate-pulse ${
+              isOnline 
+                ? 'bg-success shadow-[0_0_10px_rgba(74,222,128,0.8)]' 
+                : 'bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.8)]'
+            }`}></div>
+            <span className="text-xs font-mono text-text-secondary uppercase tracking-wider">
+              {isOnline ? 'System Online' : 'System Offline'}
+            </span>
           </div>
         </div>
       </aside>

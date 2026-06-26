@@ -185,16 +185,16 @@ export default function TemplatesPage() {
         }
       />
 
-      <div className="bg-white/80 dark:bg-[#0a0a0a]/80 backdrop-blur-md rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.05)] dark:shadow-glass border border-black/10 dark:border-white/10 p-4 sm:p-6 flex-1 flex flex-col min-h-0 relative overflow-hidden">
+      <div className="bg-white/80 dark:bg-[#0a0a0a]/80 backdrop-blur-md rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.05)] dark:shadow-glass border border-black/10 dark:border-white/10 p-4 sm:p-6 flex-1 flex flex-col lg:min-h-0 relative overflow-hidden">
         {/* HUD Grid Overlay */}
         <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.02)_1px,transparent_1px)] dark:bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),dark:linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:30px_30px] pointer-events-none opacity-50 z-0"></div>
         <div className="relative z-10 flex flex-col h-full">
         {/* Tabs */}
         <div className="border-b border-editorial-border dark:border-editorial-border mb-6 shrink-0">
-          <nav className="-mb-px flex space-x-8" aria-label="Tabs">
+          <nav className="-mb-px flex space-x-8 overflow-x-auto hide-scrollbar" aria-label="Tabs">
             <button
               onClick={() => setActiveTab('library')}
-              className={`whitespace-nowrap flex items-center py-4 px-1 border-b-2 font-medium text-sm ${
+              className={`whitespace-nowrap flex items-center py-4 px-1 border-b-2 font-medium text-sm shrink-0 ${
                 activeTab === 'library'
                   ? 'border-brand-500 text-brand-600 dark:text-brand-400'
                   : 'border-transparent text-editorial-secondary hover:text-editorial-primary hover:border-editorial-border dark:text-editorial-secondary dark:hover:text-editorial-secondary dark:hover:border-editorial-border'
@@ -205,7 +205,7 @@ export default function TemplatesPage() {
             </button>
             <button
               onClick={() => setActiveTab('custom')}
-              className={`whitespace-nowrap flex items-center py-4 px-1 border-b-2 font-medium text-sm ${
+              className={`whitespace-nowrap flex items-center py-4 px-1 border-b-2 font-medium text-sm shrink-0 ${
                 activeTab === 'custom'
                   ? 'border-brand-500 text-brand-600 dark:text-brand-400'
                   : 'border-transparent text-editorial-secondary hover:text-editorial-primary hover:border-editorial-border dark:text-editorial-secondary dark:hover:text-editorial-secondary dark:hover:border-editorial-border'
@@ -217,10 +217,10 @@ export default function TemplatesPage() {
           </nav>
         </div>
 
-        <div className="flex-1 flex flex-col min-h-0 mb-4">
+        <div className="flex-1 flex flex-col lg:min-h-0 mb-4">
           {/* Tab Content: Prompt Library */}
           {activeTab === 'library' && (
-            <div className="flex-1 overflow-y-auto custom-scrollbar pr-2">
+            <div className="flex-1 lg:overflow-y-auto custom-scrollbar lg:pr-2">
               {libraryLoading ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {Array.from({ length: 6 }).map((_, i) => (

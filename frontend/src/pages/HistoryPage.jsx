@@ -111,7 +111,7 @@ export default function HistoryPage() {
         description="Browse, search, and manage your previously generated emails."
       />
 
-      <div className="bg-white/80 dark:bg-[#0a0a0a]/80 backdrop-blur-md border border-black/10 dark:border-white/10 rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.05)] dark:shadow-glass p-4 sm:p-6 flex-1 flex flex-col min-h-0 relative overflow-hidden">
+      <div className="bg-white/80 dark:bg-[#0a0a0a]/80 backdrop-blur-md border border-black/10 dark:border-white/10 rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.05)] dark:shadow-glass p-4 sm:p-6 flex-1 flex flex-col lg:min-h-0 relative overflow-hidden">
         {/* HUD Grid Overlay */}
         <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.02)_1px,transparent_1px)] dark:bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),dark:linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:30px_30px] pointer-events-none opacity-50 z-0"></div>
         <div className="relative z-10 flex flex-col h-full">
@@ -120,7 +120,7 @@ export default function HistoryPage() {
             <FilterPanel activeFilter={activeFilter} onFilterChange={handleFilterChange} />
           </div>
 
-          <div className="flex-1 overflow-y-auto custom-scrollbar pr-2 mb-4">
+          <div className="flex-1 lg:overflow-y-auto custom-scrollbar lg:pr-2 mb-4">
 
         {/* Loading Skeletons */}
         {loading && (

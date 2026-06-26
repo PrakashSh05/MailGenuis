@@ -16,7 +16,7 @@ public class OpenApiConfig {
         final String securitySchemeName = "bearerAuth";
         return new OpenAPI()
                 .info(new Info()
-                        .title("Smart AI Email Generator API")
+                        .title("MailZap API")
                         .version("1.0.0")
                         .description("Production-ready backend API specifications for the AI Email Generator application."))
                 .addSecurityItem(new SecurityRequirement().addList(securitySchemeName))

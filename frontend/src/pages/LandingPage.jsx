@@ -19,11 +19,11 @@ export default function LandingPage() {
             <div className="p-2 rounded-xl bg-brand/10 border border-brand/20 shadow-glow-orange">
               <Zap className="h-6 w-6 text-brand" />
             </div>
-            <span className="text-xl font-display font-bold tracking-widest uppercase">
-              Mail-Genius AI
+            <span className="hidden md:block text-base sm:text-xl font-display font-bold tracking-widest uppercase whitespace-nowrap">
+              MailZap
             </span>
           </div>
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-2 sm:gap-6">
             <button 
               onClick={toggleTheme} 
               className="p-2 rounded-xl bg-black/5 dark:bg-white/5 text-gray-600 dark:text-gray-400 hover:text-brand dark:hover:text-brand transition-colors"
@@ -31,11 +31,12 @@ export default function LandingPage() {
             >
               {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
             </button>
-            <Link to="/login" className="text-gray-600 dark:text-text-secondary hover:text-gray-900 dark:hover:text-white text-sm font-mono uppercase tracking-widest transition-colors">
+            <Link to="/login" className="hidden md:block text-gray-600 dark:text-text-secondary hover:text-gray-900 dark:hover:text-white text-sm font-mono uppercase tracking-widest transition-colors whitespace-nowrap">
               Sign In
             </Link>
-            <Link to="/register" className="bg-brand/10 border border-brand/30 hover:bg-brand/20 hover:border-brand text-brand px-5 py-2.5 rounded-xl text-sm font-mono uppercase tracking-widest transition-all shadow-glow-orange group flex items-center gap-2">
-              <span>Get Started Free</span>
+            <Link to="/register" className="hidden md:flex bg-brand/10 border border-brand/30 hover:bg-brand/20 hover:border-brand text-brand px-3 py-2 sm:px-5 sm:py-2.5 rounded-xl text-xs sm:text-sm font-mono uppercase tracking-widest transition-all shadow-glow-orange group items-center gap-1 sm:gap-2 whitespace-nowrap">
+              <span className="hidden sm:inline">Get Started Free</span>
+              <span className="sm:hidden">Get Started</span>
               <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
@@ -81,7 +82,7 @@ export default function LandingPage() {
                 <span className="h-3 w-3 rounded-full bg-yellow-500" />
                 <span className="h-3 w-3 rounded-full bg-green-500" />
               </div>
-              <span className="text-xs text-gray-500 dark:text-text-secondary font-mono tracking-widest uppercase">mail-genius-workspace.app</span>
+              <span className="text-xs text-gray-500 dark:text-text-secondary font-mono tracking-widest uppercase">mailzap-workspace.app</span>
               <div className="w-16"></div>
             </div>
             <div className="flex-1 flex items-center justify-center p-8 bg-[radial-gradient(ellipse_at_center,rgba(255,87,34,0.05),transparent_70%)]">
@@ -189,9 +190,9 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-3">
             <Zap className="h-5 w-5 text-brand" />
-            <span className="font-display font-bold tracking-widest uppercase text-gray-900 dark:text-white transition-colors duration-300">Mail-Genius AI</span>
+            <span className="font-display font-bold tracking-widest uppercase text-gray-900 dark:text-white transition-colors duration-300">MailZap</span>
           </div>
-          <div className="text-xs font-mono text-gray-500 dark:text-text-secondary uppercase tracking-widest transition-colors duration-300">© {new Date().getFullYear()} Mail-Genius AI. All rights reserved.</div>
+          <div className="text-xs font-mono text-gray-500 dark:text-text-secondary uppercase tracking-widest transition-colors duration-300">© {new Date().getFullYear()} MailZap. All rights reserved.</div>
         </div>
       </footer>
     </div>
