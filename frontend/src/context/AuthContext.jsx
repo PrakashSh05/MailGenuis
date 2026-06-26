@@ -21,9 +21,9 @@ const parseJwt = (token) => {
 };
 
 export function AuthProvider({ children }) {
-  const [token, setToken] = useState(() => localStorage.getItem('token') || null);
+  const [token, setToken] = useState(() => sessionStorage.getItem('token') || null);
   const [user, setUser] = useState(() => {
-    const saved = localStorage.getItem('user');
+    const saved = sessionStorage.getItem('user');
     return saved ? JSON.parse(saved) : null;
   });
   const [loading, setLoading] = useState(true);
@@ -32,16 +32,16 @@ export function AuthProvider({ children }) {
   const setAuthData = (newToken, newUser) => {
     setToken(newToken);
     setUser(newUser);
-    localStorage.setItem('token', newToken);
-    localStorage.setItem('user', JSON.stringify(newUser));
+    sessionStorage.setItem('token', newToken);
+    sessionStorage.setItem('user', JSON.stringify(newUser));
     scheduleAutoLogout(newToken);
   };
 
   const clearAuthData = () => {
     setToken(null);
     setUser(null);
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
+    sessionStorage.removeItem('token');
+    sessionStorage.removeItem('user');
     if (logoutTimerRef.current) {
       clearTimeout(logoutTimerRef.current);
       logoutTimerRef.current = null;
@@ -92,8 +92,8 @@ export function AuthProvider({ children }) {
 
   // Restore and validate session on startup
   useEffect(() => {
-    const savedToken = localStorage.getItem('token');
-    const savedUser = localStorage.getItem('user');
+    const savedToken = sessionStorage.getItem('token');
+    const savedUser = sessionStorage.getItem('user');
 
     if (savedToken && savedUser) {
       const decoded = parseJwt(savedToken);
@@ -102,8 +102,8 @@ export function AuthProvider({ children }) {
         setUser(JSON.parse(savedUser));
         scheduleAutoLogout(savedToken);
       } else {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
+        sessionStorage.removeItem('token');
+        sessionStorage.removeItem('user');
       }
     }
     setLoading(false);
