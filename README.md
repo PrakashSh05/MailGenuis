@@ -2,6 +2,9 @@
 
 A production-grade, full-stack SaaS application that leverages **Google Gemini AI** to generate, refine, and manage professional emails. Built with **Spring Boot 3**, **React 18**, **PostgreSQL**, and containerized with **Docker**.
 
+> 💡 **Developer Note:** While this is a full-stack application, the primary focus of this project was engineering a robust, scalable backend. Key achievements include designing a normalized PostgreSQL database, implementing stateless JWT security, integrating third-party AI APIs, and setting up centralized exception handling and rate limiting via Spring Boot.
+
+
 [![Java](https://img.shields.io/badge/Java-21-orange?style=flat-square)](https://openjdk.org/)
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.3-green?style=flat-square)](https://spring.io/projects/spring-boot)
 [![React](https://img.shields.io/badge/React-18-blue?style=flat-square)](https://react.dev/)
