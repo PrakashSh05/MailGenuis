@@ -40,7 +40,7 @@ export default function HistoryPage() {
         size: 12,
         search: search || undefined,
         tone: activeFilter && activeFilter !== 'FAVORITES' ? activeFilter : undefined,
-        isFavorite: activeFilter === 'FAVORITES' ? true : undefined
+        favorite: activeFilter === 'FAVORITES' ? true : undefined
       };
 
       const response = await emailService.getEmailHistory(params);
@@ -70,7 +70,7 @@ export default function HistoryPage() {
 
   const handleToggleFavorite = async (id, currentStatus) => {
     try {
-      await emailService.toggleFavorite(id);
+      await emailService.toggleFavorite(id, !currentStatus);
       setEmails(emails.map(e => e.id === id ? { ...e, isFavorite: !currentStatus } : e));
       if (viewEmail && viewEmail.id === id) {
         setViewEmail({ ...viewEmail, isFavorite: !currentStatus });
@@ -105,17 +105,22 @@ export default function HistoryPage() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto space-y-6 flex flex-col h-full min-h-[calc(100vh-8rem)]">
+    <div className="w-full space-y-6 flex flex-col flex-1">
       <PageHeader 
         title="Email History" 
         description="Browse, search, and manage your previously generated emails."
       />
 
-      <div className="bg-warm-primary dark:bg-warm-primary rounded-xl shadow-sm border border-editorial-border dark:border-editorial-border p-4 sm:p-6 flex-1 flex flex-col">
-        <div className="mb-6 space-y-4">
-          <SearchBar onSearch={handleSearch} />
-          <FilterPanel activeFilter={activeFilter} onFilterChange={handleFilterChange} />
-        </div>
+      <div className="bg-white/80 dark:bg-[#0a0a0a]/80 backdrop-blur-md border border-black/10 dark:border-white/10 rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.05)] dark:shadow-glass p-4 sm:p-6 flex-1 flex flex-col min-h-0 relative overflow-hidden">
+        {/* HUD Grid Overlay */}
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.02)_1px,transparent_1px)] dark:bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),dark:linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:30px_30px] pointer-events-none opacity-50 z-0"></div>
+        <div className="relative z-10 flex flex-col h-full">
+          <div className="mb-6 space-y-4 shrink-0">
+            <SearchBar onSearch={handleSearch} />
+            <FilterPanel activeFilter={activeFilter} onFilterChange={handleFilterChange} />
+          </div>
+
+          <div className="flex-1 overflow-y-auto custom-scrollbar pr-2 mb-4">
 
         {/* Loading Skeletons */}
         {loading && (
@@ -160,8 +165,11 @@ export default function HistoryPage() {
           </div>
         )}
 
+          </div>
+        </div>
+
         {/* Pagination aligned to bottom */}
-        <div className="mt-auto">
+        <div className="mt-auto relative z-10 pt-2 border-t border-black/10 dark:border-white/10 shrink-0">
           <Pagination 
             currentPage={page} 
             totalPages={totalPages} 
@@ -177,14 +185,14 @@ export default function HistoryPage() {
         title="Email Details"
       >
         {viewEmail && (
-          <div className="p-4 sm:p-6">
-            <h3 className="text-xl font-bold text-editorial-primary dark:text-editorial-primary mb-4">
+          <div className="p-4 sm:p-6 relative z-10">
+            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
               {viewEmail.subject}
             </h3>
-            <div className="whitespace-pre-wrap text-editorial-secondary dark:text-editorial-secondary font-serif mb-6 leading-relaxed bg-warm-secondary dark:bg-warm-secondary p-4 rounded-lg border border-slate-100 dark:border-editorial-border">
+            <div className="whitespace-pre-wrap text-gray-800 dark:text-gray-300 font-serif mb-6 leading-relaxed bg-black/5 dark:bg-white/5 p-4 rounded-lg border border-black/10 dark:border-white/10">
               {viewEmail.body}
             </div>
-            <div className="flex justify-end gap-2 border-t border-slate-100 dark:border-editorial-border pt-4">
+            <div className="flex justify-end gap-2 border-t border-black/10 dark:border-white/10 pt-4">
               <CopyButton text={`${viewEmail.subject}\n\n${viewEmail.body}`} />
               <DownloadButton text={`${viewEmail.subject}\n\n${viewEmail.body}`} subject={viewEmail.subject} />
             </div>

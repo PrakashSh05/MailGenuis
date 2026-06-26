@@ -12,5 +12,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class FavoriteRequest {
     @NotNull(message = "Favorite status is required")
-    private Boolean isFavorite;
+    @com.fasterxml.jackson.annotation.JsonProperty("isFavorite")
+    private Boolean favorite;
 }

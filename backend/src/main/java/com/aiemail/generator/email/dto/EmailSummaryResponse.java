@@ -16,10 +16,12 @@ import java.util.UUID;
 public class EmailSummaryResponse {
     private UUID id;
     private String subject;
+    private String body;
     private String purpose;
     private String recipient;
     private Tone tone;
-    private boolean isFavorite;
+    @com.fasterxml.jackson.annotation.JsonProperty("isFavorite")
+    private boolean favorite;
     private boolean isSaved;
     private LocalDateTime createdAt;
 }

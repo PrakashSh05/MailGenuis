@@ -15,7 +15,6 @@ public interface AuthMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "passwordHash", ignore = true)
     @Mapping(target = "role", ignore = true)
-    @Mapping(target = "profilePictureUrl", ignore = true)
     @Mapping(target = "defaultTone", ignore = true)
     @Mapping(target = "defaultLanguage", ignore = true)
     @Mapping(target = "defaultEmailLength", ignore = true)

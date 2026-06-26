@@ -44,5 +44,6 @@ public class SaveEmailRequest {
     private String body;
 
     @NotNull(message = "Favorite state must be specified")
-    private Boolean isFavorite;
+    @com.fasterxml.jackson.annotation.JsonProperty("isFavorite")
+    private Boolean favorite;
 }

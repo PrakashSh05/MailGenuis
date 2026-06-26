@@ -17,7 +17,7 @@ public interface EmailRepository extends JpaRepository<EmailEntity, UUID> {
     
     Page<EmailEntity> findByUser(UserEntity user, Pageable pageable);
     
-    Page<EmailEntity> findByUserAndIsFavorite(UserEntity user, boolean isFavorite, Pageable pageable);
+    Page<EmailEntity> findByUserAndFavorite(UserEntity user, boolean favorite, Pageable pageable);
 
     Optional<EmailEntity> findByIdAndUser(UUID id, UserEntity user);
 
@@ -33,17 +33,17 @@ public interface EmailRepository extends JpaRepository<EmailEntity, UUID> {
            "LOWER(e.purpose) LIKE LOWER(CONCAT('%', :query, '%')))")
     Page<EmailEntity> searchEmailsByTone(@Param("user") UserEntity user, @Param("query") String query, @Param("tone") com.aiemail.generator.common.enums.Tone tone, Pageable pageable);
 
-    @Query("SELECT e FROM EmailEntity e WHERE e.user = :user AND e.isFavorite = :isFavorite AND " +
+    @Query("SELECT e FROM EmailEntity e WHERE e.user = :user AND e.favorite = :favorite AND " +
            "(LOWER(e.subject) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
            "LOWER(e.body) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
            "LOWER(e.purpose) LIKE LOWER(CONCAT('%', :query, '%')))")
-    Page<EmailEntity> searchEmailsByFavorite(@Param("user") UserEntity user, @Param("query") String query, @Param("isFavorite") boolean isFavorite, Pageable pageable);
+    Page<EmailEntity> searchEmailsByFavorite(@Param("user") UserEntity user, @Param("query") String query, @Param("favorite") boolean favorite, Pageable pageable);
 
     Page<EmailEntity> findByUserAndTone(UserEntity user, com.aiemail.generator.common.enums.Tone tone, Pageable pageable);
 
     long countByUser(UserEntity user);
 
-    long countByUserAndIsFavorite(UserEntity user, boolean isFavorite);
+    long countByUserAndFavorite(UserEntity user, boolean favorite);
 
     long countByUserAndCreatedAtAfter(UserEntity user, java.time.LocalDateTime startDateTime);
 

@@ -121,11 +121,11 @@ class EmailServiceTest {
     void toggleFavorite_success() {
         UUID id = emailEntity.getId();
         FavoriteRequest favReq = new FavoriteRequest();
-        favReq.setIsFavorite(true);
+        favReq.setFavorite(true);
 
         when(emailRepository.findByIdAndUser(id, user)).thenReturn(Optional.of(emailEntity));
         when(emailRepository.save(any())).thenReturn(emailEntity);
-        EmailResponse resp = EmailResponse.builder().isFavorite(true).build();
+        EmailResponse resp = EmailResponse.builder().favorite(true).build();
         when(emailMapper.emailEntityToEmailResponse(any())).thenReturn(resp);
 
         EmailResponse result = emailService.toggleFavorite(id, favReq, user);
@@ -168,7 +168,7 @@ class EmailServiceTest {
     @Test
     void getEmailHistory_emptyQuery_favoriteFilter() {
         Page<EmailEntity> page = new PageImpl<>(List.of(emailEntity));
-        when(emailRepository.findByUserAndIsFavorite(eq(user), eq(true), any(Pageable.class))).thenReturn(page);
+        when(emailRepository.findByUserAndFavorite(eq(user), eq(true), any(Pageable.class))).thenReturn(page);
         when(emailMapper.emailEntityToEmailSummaryResponse(any())).thenReturn(new EmailSummaryResponse());
 
         PaginatedEmailResponse result = emailService.getEmailHistory(user, null, true, null, 0, 10, "createdAt");

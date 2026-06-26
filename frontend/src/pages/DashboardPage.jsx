@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import dashboardService from '../services/dashboardService';
+import profileService from '../services/profileService';
 import PageHeader from '../components/layout/PageHeader';
 import Card from '../components/ui/Card';
 import Button from '../components/ui/Button';
@@ -8,9 +9,9 @@ import Skeleton from '../components/ui/Skeleton';
 import EmptyState from '../components/ui/EmptyState';
 import StatisticCard from '../components/features/dashboard/StatisticCard';
 import ActivityTimeline from '../components/features/dashboard/ActivityTimeline';
-import { 
-  Mail, Star, Calendar, FileText, Plus, 
-  Clock, Sparkles, MessageSquare 
+import {
+  Mail, Star, Calendar, FileText, Plus,
+  Clock, Sparkles, MessageSquare, Target
 } from 'lucide-react';
 
 export default function DashboardPage() {
@@ -19,7 +20,8 @@ export default function DashboardPage() {
   const [data, setData] = useState({
     statistics: [],
     activity: [],
-    analytics: null
+    analytics: null,
+    profile: null
   });
   const [error, setError] = useState(null);
 
@@ -28,18 +30,20 @@ export default function DashboardPage() {
       try {
         setLoading(true);
         // Using Promise.all to fetch metrics concurrently
-        const [summaryResponse, activityResponse] = await Promise.all([
+        const [summaryResponse, activityResponse, profileResponse] = await Promise.all([
           dashboardService.getDashboardSummary(),
-          dashboardService.getDashboardActivity()
+          dashboardService.getDashboardActivity(),
+          profileService.getProfile()
         ]);
-        
+
         setData({
           statistics: summaryResponse.data?.statistics || [],
           analytics: summaryResponse.data?.analytics || null,
-          activity: activityResponse.data || []
+          activity: activityResponse.data || [],
+          profile: profileResponse.data || null
         });
       } catch (err) {
-        setError('Failed to load dashboard data. Please try again later.');
+        setError('Failed to initialize HUD data link. Retrying...');
         console.error('Dashboard load error:', err);
       } finally {
         setLoading(false);
@@ -55,152 +59,164 @@ export default function DashboardPage() {
     if (lower.includes('today')) return Calendar;
     if (lower.includes('favorite')) return Star;
     if (lower.includes('template')) return FileText;
-    return Mail;
+    return Target;
   };
 
   const getStatColor = (title) => {
+    // HUD Theme: everything is orange/neon variants
     const lower = title.toLowerCase();
-    if (lower.includes('today')) return { color: 'text-indigo-600 dark:text-indigo-400', bg: 'bg-indigo-50 dark:bg-indigo-900/20' };
-    if (lower.includes('favorite')) return { color: 'text-accent dark:text-accent', bg: 'bg-yellow-50 dark:bg-yellow-900/20' };
-    if (lower.includes('template')) return { color: 'text-blue-600 dark:text-blue-400', bg: 'bg-blue-50 dark:bg-blue-900/20' };
-    return { color: 'text-brand-600 dark:text-brand-400', bg: 'bg-brand-50 dark:bg-brand-900/20' };
+    if (lower.includes('today')) return { color: 'text-brand', bg: 'bg-brand/10 border border-brand/30 shadow-[inset_0_0_15px_rgba(255,87,34,0.1)]' };
+    if (lower.includes('favorite')) return { color: 'text-accent', bg: 'bg-accent/10 border border-accent/30 shadow-[inset_0_0_15px_rgba(230,81,0,0.1)]' };
+    if (lower.includes('template')) return { color: 'text-gray-900 dark:text-white', bg: 'bg-black/5 dark:bg-white/5 border border-black/20 dark:border-white/20' };
+    return { color: 'text-brand', bg: 'bg-brand/10 border border-brand/30 shadow-[inset_0_0_15px_rgba(255,87,34,0.1)]' };
   };
 
   return (
-    <div className="max-w-7xl mx-auto space-y-6">
-      <PageHeader 
-        title="Dashboard" 
-        description="Overview of your email generation activity and usage."
-        actions={
-          <Button onClick={() => navigate('/generate')} icon={Plus}>
-            New Email
-          </Button>
-        }
-      />
+    <div className="max-w-7xl mx-auto w-full h-[calc(100vh-8rem)] flex flex-col relative gap-4 pb-4">
+      <div className="shrink-0">
+        <PageHeader
+          title="Command Center"
+          subtitle="System overview and usage telemetry."
+          actions={
+            <Button onClick={() => navigate('/generate')} icon={Plus} className="shadow-glow-orange">
+              Initialize Generator
+            </Button>
+          }
+        />
 
-      {error && (
-        <div className="bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 p-4 rounded-lg text-sm mb-6">
-          {error}
-        </div>
-      )}
-
-      {/* Statistics Cards Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {loading ? (
-          Array.from({ length: 4 }).map((_, i) => (
-            <Card key={`stat-skel-${i}`} className="p-5">
-              <Skeleton className="h-4 w-24 mb-4" />
-              <Skeleton className="h-10 w-16" />
-            </Card>
-          ))
-        ) : (
-          data.statistics.map((stat, i) => {
-            const colors = getStatColor(stat.title);
-            return (
-              <StatisticCard 
-                key={i}
-                title={stat.title}
-                value={stat.value}
-                trend={stat.trend}
-                trendLabel={stat.trendLabel}
-                icon={getStatIcon(stat.title)}
-                colorClass={colors.color}
-                bgClass={colors.bg}
-              />
-            );
-          })
+        {error && (
+          <div className="bg-red-500/10 border border-red-500/50 text-red-500 p-4 rounded-xl text-sm mb-4 flex items-center gap-3 font-mono">
+            <div className="h-2 w-2 bg-red-500 rounded-full animate-pulse"></div>
+            {error}
+          </div>
         )}
+
+        {/* Statistics Cards Grid */}
+        <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
+          {loading ? (
+            Array.from({ length: 5 }).map((_, i) => (
+              <Card key={`stat-skel-${i}`} className="p-6 bg-white/80 dark:bg-[#0a0a0a]/80 backdrop-blur-md border border-black/10 dark:border-white/10 rounded-2xl">
+                <Skeleton className="h-4 w-24 mb-4 bg-black/10 dark:bg-white/10" />
+                <Skeleton className="h-10 w-16 bg-black/10 dark:bg-white/10" />
+              </Card>
+            ))
+          ) : (
+            data.statistics.map((stat, i) => {
+              const colors = getStatColor(stat.title);
+              return (
+                <div key={i} className="relative group">
+                  <div className="absolute inset-0 bg-brand/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl pointer-events-none"></div>
+                  <StatisticCard
+                    title={stat.title}
+                    value={stat.value}
+                    trend={stat.trend}
+                    trendLabel={stat.trendLabel}
+                    icon={getStatIcon(stat.title)}
+                    colorClass={colors.color}
+                    bgClass={colors.bg}
+                  />
+                </div>
+              );
+            })
+          )}
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 flex-1 min-h-0">
         {/* Left Column: Analytics & Quick Actions */}
-        <div className="lg:col-span-1 space-y-6">
-          <Card>
-            <h3 className="text-lg font-bold text-editorial-primary dark:text-editorial-primary mb-4">
-              AI Preferences
+        <div className="lg:col-span-1 flex flex-col gap-4 overflow-y-auto custom-scrollbar pr-2">
+          <Card className="shrink-0 flex flex-col bg-white/80 dark:bg-[#0a0a0a]/80 backdrop-blur-md border-border hover:border-brand/50 transition-colors duration-500">
+            <h3 className="text-lg font-display font-bold text-gray-900 dark:text-white mb-4 uppercase tracking-widest flex items-center gap-2 shrink-0">
+              <Sparkles className="h-5 w-5 text-brand" /> System Preferences
             </h3>
             {loading ? (
               <div className="space-y-4">
-                <Skeleton className="h-12 w-full" />
-                <Skeleton className="h-12 w-full" />
-                <Skeleton className="h-12 w-full" />
+                <Skeleton className="h-12 w-full bg-black/5 dark:bg-white/5" />
+                <Skeleton className="h-12 w-full bg-black/5 dark:bg-white/5" />
+                <Skeleton className="h-12 w-full bg-black/5 dark:bg-white/5" />
               </div>
-            ) : data.analytics ? (
-              <div className="space-y-4">
-                <div className="flex items-center justify-between p-3 bg-warm-secondary dark:bg-black/30 rounded-lg">
+            ) : data.profile ? (
+              <div className="space-y-3 font-mono">
+                <div className="flex items-center justify-between p-3 bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/5 rounded-xl hover:bg-brand/5 hover:border-brand/20 transition-colors shrink-0">
                   <div className="flex items-center gap-3">
-                    <MessageSquare className="h-5 w-5 text-editorial-secondary" />
-                    <span className="text-sm font-medium text-editorial-primary dark:text-editorial-secondary">Top Tone</span>
+                    <MessageSquare className="h-4 w-4 text-text-secondary" />
+                    <span className="text-xs text-text-secondary uppercase">Default Tone</span>
                   </div>
-                  <span className="text-sm font-bold text-brand-600 dark:text-brand-400">
-                    {data.analytics.mostUsedTone || 'N/A'}
+                  <span className="text-sm font-bold text-brand">
+                    {data.profile.defaultTone || 'PROFESSIONAL'}
                   </span>
                 </div>
-                <div className="flex items-center justify-between p-3 bg-warm-secondary dark:bg-black/30 rounded-lg">
+                <div className="flex items-center justify-between p-3 bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/5 rounded-xl hover:bg-brand/5 hover:border-brand/20 transition-colors shrink-0">
                   <div className="flex items-center gap-3">
-                    <Sparkles className="h-5 w-5 text-editorial-secondary" />
-                    <span className="text-sm font-medium text-editorial-primary dark:text-editorial-secondary">Top Language</span>
+                    <Target className="h-4 w-4 text-text-secondary" />
+                    <span className="text-xs text-text-secondary uppercase">Default Language</span>
                   </div>
-                  <span className="text-sm font-bold text-brand-600 dark:text-brand-400">
-                    {data.analytics.mostUsedLanguage || 'N/A'}
+                  <span className="text-sm font-bold text-brand">
+                    {data.profile.defaultLanguage || 'ENGLISH'}
                   </span>
                 </div>
-                <div className="flex items-center justify-between p-3 bg-warm-secondary dark:bg-black/30 rounded-lg">
+                <div className="flex items-center justify-between p-3 bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/5 rounded-xl hover:bg-brand/5 hover:border-brand/20 transition-colors shrink-0">
                   <div className="flex items-center gap-3">
-                    <FileText className="h-5 w-5 text-editorial-secondary" />
-                    <span className="text-sm font-medium text-editorial-primary dark:text-editorial-secondary">Favorite Template</span>
+                    <FileText className="h-4 w-4 text-text-secondary" />
+                    <span className="text-xs text-text-secondary uppercase">Default Length</span>
                   </div>
-                  <span className="text-sm font-bold text-brand-600 dark:text-brand-400 truncate max-w-[120px]">
-                    {data.analytics.mostUsedTemplate || 'None'}
+                  <span className="text-sm font-bold text-brand">
+                    {data.profile.defaultEmailLength || 'MEDIUM'}
                   </span>
                 </div>
               </div>
             ) : (
-              <EmptyState 
-                icon={Sparkles} 
-                title="No Data Yet" 
-                description="Generate some emails to see your AI preferences." 
+              <EmptyState
+                icon={Sparkles}
+                title="No Preferences"
+                description="Configure in Settings."
               />
             )}
           </Card>
 
-          <Card>
-            <h3 className="text-lg font-bold text-editorial-primary dark:text-editorial-primary mb-4">
-              Quick Actions
+          <Card className="shrink-0 bg-white/80 dark:bg-[#0a0a0a]/80 backdrop-blur-md border-border">
+            <h3 className="text-lg font-display font-bold text-gray-900 dark:text-white mb-4 uppercase tracking-widest flex items-center gap-2">
+              <Target className="h-5 w-5 text-brand" /> Quick Protocols
             </h3>
-            <div className="grid grid-cols-2 gap-3">
-              <Button variant="outline" className="w-full justify-start" onClick={() => navigate('/history')} icon={Clock}>
-                History
+            <div className="grid grid-cols-2 gap-4">
+              <Button variant="outline" className="w-full justify-start border-black/10 dark:border-white/10 hover:border-brand hover:text-brand bg-transparent" onClick={() => navigate('/history')} icon={Clock}>
+                Saved History
               </Button>
-              <Button variant="outline" className="w-full justify-start" onClick={() => navigate('/templates')} icon={FileText}>
-                Templates
+              <Button variant="outline" className="w-full justify-start border-black/10 dark:border-white/10 hover:border-brand hover:text-brand bg-transparent" onClick={() => navigate('/templates')} icon={FileText}>
+                Presets
               </Button>
             </div>
           </Card>
         </div>
 
         {/* Right Column: Activity Timeline */}
-        <div className="lg:col-span-2">
-          <Card className="h-full min-h-[400px]">
-            <h3 className="text-lg font-bold text-editorial-primary dark:text-editorial-primary mb-6">
-              Recent Activity
+        <div className="lg:col-span-2 flex flex-col min-h-0">
+          <Card className="flex-1 flex flex-col min-h-0 bg-white/80 dark:bg-[#0a0a0a]/80 backdrop-blur-md border-border hover:border-brand/30 transition-colors duration-500 relative overflow-hidden">
+            {/* Grid overlay for HUD effect */}
+            <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.02)_1px,transparent_1px)] dark:bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),dark:linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:30px_30px] pointer-events-none opacity-50 z-0"></div>
+
+            <h3 className="text-lg font-display font-bold text-gray-900 dark:text-white mb-6 uppercase tracking-widest relative z-10 flex items-center gap-2 shrink-0">
+              <Clock className="h-5 w-5 text-brand" /> System Log
             </h3>
-            {loading ? (
-              <div className="space-y-6 ml-3">
-                <Skeleton className="h-16 w-full" />
-                <Skeleton className="h-16 w-full" />
-                <Skeleton className="h-16 w-full" />
-              </div>
-            ) : data.activity.length > 0 ? (
-              <ActivityTimeline activities={data.activity} />
-            ) : (
-              <EmptyState 
-                icon={Clock} 
-                title="No Recent Activity" 
-                description="Your recent actions will appear here." 
-                action={{ label: 'Generate Email', onClick: () => navigate('/generate') }}
-              />
-            )}
+
+            <div className="relative z-10 overflow-y-auto custom-scrollbar flex-1 pr-2">
+              {loading ? (
+                <div className="space-y-4 ml-4">
+                  <Skeleton className="h-16 w-full bg-black/5 dark:bg-white/5 rounded-xl" />
+                  <Skeleton className="h-16 w-full bg-black/5 dark:bg-white/5 rounded-xl" />
+                  <Skeleton className="h-16 w-full bg-black/5 dark:bg-white/5 rounded-xl" />
+                </div>
+              ) : data.activity.length > 0 ? (
+                <ActivityTimeline activities={data.activity} />
+              ) : (
+                <EmptyState
+                  icon={Clock}
+                  title="Log Empty"
+                  description="Awaiting user activity telemetry."
+                  action={{ label: 'Execute Generator', onClick: () => navigate('/generate') }}
+                />
+              )}
+            </div>
           </Card>
         </div>
       </div>

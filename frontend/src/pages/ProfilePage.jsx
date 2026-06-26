@@ -4,7 +4,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import PageHeader from '../components/layout/PageHeader';
 import ProfileCard from '../components/features/profile/ProfileCard';
-import AvatarUploader from '../components/features/profile/AvatarUploader';
 import PasswordStrengthMeter from '../components/features/profile/PasswordStrengthMeter';
 import Card from '../components/ui/Card';
 import Input from '../components/ui/Input';
@@ -13,11 +12,10 @@ import Toast from '../components/ui/Toast';
 import Skeleton from '../components/ui/Skeleton';
 import profileService from '../services/profileService';
 import { useAuth } from '../context/AuthContext';
-import { Save, Lock, User, Eye, EyeOff } from 'lucide-react';
+import { Save, Lock, User, Eye, EyeOff, Terminal, Shield } from 'lucide-react';
 
 const profileSchema = z.object({
-  fullName: z.string().min(1, 'Full name is required').max(100, 'Maximum 100 characters'),
-  profilePictureUrl: z.string().url('Must be a valid URL').optional().or(z.literal(''))
+  fullName: z.string().min(1, 'Full name is required').max(100, 'Maximum 100 characters')
 });
 
 const passwordSchema = z.object({
@@ -30,7 +28,7 @@ const passwordSchema = z.object({
 });
 
 export default function ProfilePage() {
-  const { user, login } = useAuth(); // Need to update context if name changes
+  const { user, updateUser } = useAuth(); // Need to update context if name changes
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [toast, setToast] = useState(null);
@@ -50,8 +48,7 @@ export default function ProfilePage() {
     resolver: zodResolver(profileSchema)
   });
 
-  const avatarUrl = watchProfile('profilePictureUrl');
-
+  // Removed avatarUrl watch
   // Password Form
   const {
     register: registerPassword,
@@ -71,7 +68,6 @@ export default function ProfilePage() {
         const res = await profileService.getProfile();
         setProfile(res.data);
         setProfileValue('fullName', res.data.fullName || '');
-        setProfileValue('profilePictureUrl', res.data.profilePictureUrl || '');
       } catch (err) {
         setToast({ message: 'Failed to load profile data.', type: 'error' });
       } finally {
@@ -89,10 +85,7 @@ export default function ProfilePage() {
       
       // Update global auth context so navbar avatar reflects changes immediately
       if (user) {
-        login(sessionStorage.getItem('token'), {
-          ...user,
-          name: res.data.fullName
-        });
+        updateUser({ fullName: res.data.fullName });
       }
     } catch (err) {
       setToast({ message: err.response?.data?.message || 'Failed to update profile.', type: 'error' });
@@ -115,13 +108,13 @@ export default function ProfilePage() {
 
   if (loading) {
     return (
-      <div className="max-w-4xl mx-auto space-y-6">
+      <div className="max-w-7xl mx-auto space-y-8">
         <PageHeader title="Profile Settings" />
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Card className="p-6 md:col-span-1"><Skeleton className="h-64" /></Card>
-          <div className="md:col-span-2 space-y-6">
-            <Card className="p-6"><Skeleton className="h-48" /></Card>
-            <Card className="p-6"><Skeleton className="h-64" /></Card>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          <div className="lg:col-span-4 p-6"><Skeleton className="h-64 rounded-2xl" /></div>
+          <div className="lg:col-span-8 space-y-8">
+            <div className="p-6"><Skeleton className="h-48 rounded-2xl" /></div>
+            <div className="p-6"><Skeleton className="h-64 rounded-2xl" /></div>
           </div>
         </div>
       </div>
@@ -129,38 +122,31 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
+    <div className="max-w-7xl mx-auto space-y-8">
       <PageHeader 
         title="Profile Settings" 
-        description="Manage your account information and security preferences."
+        subtitle="Manage your operator profile and security protocols."
       />
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* Left Column: Profile Card */}
-        <div className="lg:col-span-1">
+        <div className="lg:col-span-4">
           <ProfileCard profile={profile} />
         </div>
 
         {/* Right Column: Forms */}
-        <div className="lg:col-span-2 space-y-6">
+        <div className="lg:col-span-8 space-y-8">
           
           {/* General Information */}
-          <Card className="p-6">
-            <div className="flex items-center gap-2 mb-6 border-b border-slate-100 dark:border-editorial-border pb-4">
-              <User className="h-5 w-5 text-brand-500" />
-              <h3 className="text-lg font-bold text-editorial-primary dark:text-editorial-primary">General Information</h3>
-            </div>
+          <div className="bg-white/80 dark:bg-[#0a0a0a]/80 backdrop-blur-md rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.05)] dark:shadow-glass border border-black/10 dark:border-white/10 p-6 hover:border-brand/30 transition-colors duration-500 relative group">
+            <div className="absolute inset-0 bg-brand/5 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
+            <h2 className="text-lg font-display font-bold text-gray-900 dark:text-white mb-6 uppercase tracking-widest flex items-center gap-2 border-b border-black/10 dark:border-white/10 pb-4 relative z-10">
+              <Terminal className="h-5 w-5 text-brand" /> Operator Details
+            </h2>
             
-            <form onSubmit={handleProfileSubmit(onProfileSave)} className="space-y-5">
-              <AvatarUploader
-                value={avatarUrl}
-                onChange={(e) => setProfileValue('profilePictureUrl', e.target.value)}
-                error={profileErrors.profilePictureUrl?.message}
-                disabled={isSubmittingProfile}
-              />
-              
+            <form onSubmit={handleProfileSubmit(onProfileSave)} className="space-y-5 relative z-10">
               <Input
-                label="Full Name"
+                label="Operator Identity"
                 error={profileErrors.fullName?.message}
                 disabled={isSubmittingProfile}
                 {...registerProfile('fullName')}
@@ -168,31 +154,31 @@ export default function ProfilePage() {
               
               <div className="flex justify-end pt-2">
                 <Button type="submit" loading={isSubmittingProfile} icon={Save}>
-                  Save Changes
+                  Commit Changes
                 </Button>
               </div>
             </form>
-          </Card>
+          </div>
 
           {/* Security */}
-          <Card className="p-6">
-            <div className="flex items-center gap-2 mb-6 border-b border-slate-100 dark:border-editorial-border pb-4">
-              <Lock className="h-5 w-5 text-brand-500" />
-              <h3 className="text-lg font-bold text-editorial-primary dark:text-editorial-primary">Change Password</h3>
-            </div>
+          <div className="bg-white/80 dark:bg-[#0a0a0a]/80 backdrop-blur-md rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.05)] dark:shadow-glass border border-black/10 dark:border-white/10 p-6 hover:border-brand/30 transition-colors duration-500 relative group">
+            <div className="absolute inset-0 bg-brand/5 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
+            <h2 className="text-lg font-display font-bold text-gray-900 dark:text-white mb-6 uppercase tracking-widest flex items-center gap-2 border-b border-black/10 dark:border-white/10 pb-4 relative z-10">
+              <Shield className="h-5 w-5 text-brand" /> Security Protocols
+            </h2>
             
-            <form onSubmit={handlePasswordSubmit(onPasswordSave)} className="space-y-4">
+            <form onSubmit={handlePasswordSubmit(onPasswordSave)} className="space-y-4 relative z-10">
               <div className="relative">
                 <Input
                   type={showCurrentPassword ? "text" : "password"}
-                  label="Current Password"
+                  label="Current Access Key"
                   error={passwordErrors.currentPassword?.message}
                   disabled={isSubmittingPassword}
                   {...registerPassword('currentPassword')}
                 />
                 <button
                   type="button"
-                  className="absolute right-3 top-[34px] text-editorial-secondary hover:text-editorial-secondary dark:hover:text-editorial-secondary"
+                  className="absolute right-3 top-[34px] text-text-secondary hover:text-brand"
                   onClick={() => setShowCurrentPassword(!showCurrentPassword)}
                 >
                   {showCurrentPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -202,14 +188,14 @@ export default function ProfilePage() {
               <div className="relative">
                 <Input
                   type={showNewPassword ? "text" : "password"}
-                  label="New Password"
+                  label="New Access Key"
                   error={passwordErrors.newPassword?.message}
                   disabled={isSubmittingPassword}
                   {...registerPassword('newPassword')}
                 />
                 <button
                   type="button"
-                  className="absolute right-3 top-[34px] text-editorial-secondary hover:text-editorial-secondary dark:hover:text-editorial-secondary"
+                  className="absolute right-3 top-[34px] text-text-secondary hover:text-brand"
                   onClick={() => setShowNewPassword(!showNewPassword)}
                 >
                   {showNewPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -220,7 +206,7 @@ export default function ProfilePage() {
 
               <Input
                 type="password"
-                label="Confirm New Password"
+                label="Verify New Access Key"
                 error={passwordErrors.confirmPassword?.message}
                 disabled={isSubmittingPassword}
                 {...registerPassword('confirmPassword')}
@@ -228,11 +214,11 @@ export default function ProfilePage() {
               
               <div className="flex justify-end pt-4">
                 <Button type="submit" variant="primary" loading={isSubmittingPassword} icon={Lock}>
-                  Update Password
+                  Update Key
                 </Button>
               </div>
             </form>
-          </Card>
+          </div>
 
         </div>
       </div>

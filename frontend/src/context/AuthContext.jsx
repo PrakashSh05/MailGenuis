@@ -37,6 +37,13 @@ export function AuthProvider({ children }) {
     scheduleAutoLogout(newToken);
   };
 
+  const updateUser = (updatedFields) => {
+    if (!user) return;
+    const newUser = { ...user, ...updatedFields };
+    setUser(newUser);
+    sessionStorage.setItem('user', JSON.stringify(newUser));
+  };
+
   const clearAuthData = () => {
     setToken(null);
     setUser(null);
@@ -124,7 +131,7 @@ export function AuthProvider({ children }) {
   const isAuthenticated = !!token;
 
   return (
-    <AuthContext.Provider value={{ token, user, login, register, logout, loading, isAuthenticated, parseJwt }}>
+    <AuthContext.Provider value={{ token, user, login, register, logout, updateUser, loading, isAuthenticated, parseJwt }}>
       {children}
     </AuthContext.Provider>
   );

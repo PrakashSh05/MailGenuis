@@ -36,9 +36,6 @@ public class ProfileServiceImpl implements ProfileService {
     @Transactional
     public ProfileResponse updateProfile(UpdateProfileRequest request, UserEntity user) {
         user.setFullName(request.getFullName().trim());
-        if (request.getProfilePictureUrl() != null) {
-            user.setProfilePictureUrl(request.getProfilePictureUrl().trim());
-        }
         UserEntity saved = userRepository.save(user);
         return profileMapper.userEntityToProfileResponse(saved);
     }

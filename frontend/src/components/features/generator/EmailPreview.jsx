@@ -45,10 +45,10 @@ export default function EmailPreview({
   const wordCount = email?.body?.trim().split(/\s+/).filter(Boolean).length || 0;
 
   return (
-    <Card className="flex flex-col h-full bg-warm-primary dark:bg-warm-primary overflow-hidden relative">
+    <Card className="flex flex-col h-full bg-white/80 dark:bg-[#0a0a0a]/80 overflow-hidden relative">
       {/* Loading Overlay */}
       {isLoading && (
-        <div className="absolute inset-0 bg-warm-primary/60 dark:bg-warm-primary/60 backdrop-blur-sm z-10 flex flex-col items-center justify-center">
+        <div className="absolute inset-0 bg-white/60 dark:bg-[#0a0a0a]/60 backdrop-blur-sm z-10 flex flex-col items-center justify-center">
           <Spinner size="lg" className="mb-4" />
           <p className="text-sm font-medium text-editorial-secondary dark:text-editorial-secondary animate-pulse">
             AI is writing...
@@ -58,7 +58,7 @@ export default function EmailPreview({
 
       {/* Toolbar */}
       {email && (
-        <div className="border-b border-slate-100 dark:border-editorial-border p-3 bg-warm-secondary dark:bg-warm-secondary flex flex-wrap gap-2 items-center">
+        <div className="border-b border-black/10 dark:border-white/10 p-3 bg-black/5 dark:bg-white/5 flex flex-wrap gap-2 items-center">
           <Button 
             variant="ghost" 
             size="sm" 
@@ -88,19 +88,19 @@ export default function EmailPreview({
       {/* Preview Content */}
       <div className="flex-1 overflow-y-auto p-6">
         <div className="mb-6">
-          <label className="block text-xs font-bold text-editorial-secondary dark:text-editorial-secondary uppercase tracking-wider mb-2">
+          <label className="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
             Subject
           </label>
-          <div className="text-lg font-bold text-editorial-primary dark:text-editorial-primary">
+          <div className="text-lg font-bold text-gray-900 dark:text-white">
             {email?.subject || '...'}
           </div>
         </div>
         
         <div>
-          <label className="block text-xs font-bold text-editorial-secondary dark:text-editorial-secondary uppercase tracking-wider mb-2">
+          <label className="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
             Body
           </label>
-          <div className="whitespace-pre-wrap text-editorial-secondary dark:text-editorial-secondary leading-relaxed font-serif">
+          <div className="whitespace-pre-wrap text-gray-800 dark:text-gray-300 leading-relaxed font-serif">
             {email?.body || '...'}
           </div>
         </div>
@@ -108,8 +108,8 @@ export default function EmailPreview({
 
       {/* Footer Meta & Actions */}
       {email && (
-        <div className="border-t border-slate-100 dark:border-editorial-border p-4 bg-warm-secondary/50 dark:bg-warm-secondary/50 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex gap-4 text-xs font-medium text-editorial-secondary dark:text-editorial-secondary">
+        <div className="border-t border-black/10 dark:border-white/10 p-4 bg-black/5 dark:bg-white/5 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex gap-4 text-xs font-medium text-gray-600 dark:text-gray-400">
             <span>{wordCount} words</span>
             <span>{charCount} characters</span>
             <Badge variant="brand">{email.tone}</Badge>

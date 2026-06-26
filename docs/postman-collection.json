@@ -232,7 +232,7 @@
             "method": "PUT",
             "header": [{ "key": "Content-Type", "value": "application/json" }],
             "url": { "raw": "{{baseUrl}}/api/v1/profile", "host": ["{{baseUrl}}"], "path": ["api", "v1", "profile"] },
-            "body": { "mode": "raw", "raw": "{\n  \"fullName\": \"Updated Name\",\n  \"profilePictureUrl\": \"https://example.com/avatar.jpg\"\n}" }
+            "body": { "mode": "raw", "raw": "{\n  \"fullName\": \"Updated Name\"\n}" }
           }
         },
         {

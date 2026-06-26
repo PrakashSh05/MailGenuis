@@ -4,7 +4,9 @@ import PageHeader from '../components/layout/PageHeader';
 import EmailForm from '../components/features/generator/EmailForm';
 import EmailPreview from '../components/features/generator/EmailPreview';
 import emailService from '../services/emailService';
+import profileService from '../services/profileService';
 import Toast from '../components/ui/Toast';
+import { Terminal, Code2 } from 'lucide-react';
 
 export default function GeneratorPage() {
   const location = useLocation();
@@ -16,6 +18,27 @@ export default function GeneratorPage() {
 
   // Maintain form data to pass to Save payload and actions
   const [currentFormData, setCurrentFormData] = useState(location.state?.emailData || null);
+  const [isProfileLoading, setIsProfileLoading] = useState(!location.state?.emailData);
+
+  React.useEffect(() => {
+    if (!location.state?.emailData) {
+      const fetchProfile = async () => {
+        try {
+          const res = await profileService.getProfile();
+          setCurrentFormData({
+            tone: res.data.defaultTone || 'PROFESSIONAL',
+            length: res.data.defaultEmailLength || 'MEDIUM',
+            language: res.data.defaultLanguage || 'ENGLISH'
+          });
+        } catch (err) {
+          console.error("Failed to load profile defaults", err);
+        } finally {
+          setIsProfileLoading(false);
+        }
+      };
+      fetchProfile();
+    }
+  }, [location.state]);
 
   const handleGenerate = async (formData) => {
     setCurrentFormData(formData);
@@ -28,7 +51,7 @@ export default function GeneratorPage() {
         isFavorite: false
       });
     } catch (err) {
-      setToast({ message: 'Failed to generate email. Please try again.', type: 'error' });
+      setToast({ message: 'System failure: AI module unresponsive.', type: 'error' });
     } finally {
       setIsGenerating(false);
     }
@@ -54,7 +77,7 @@ export default function GeneratorPage() {
         body: response.data.body
       }));
     } catch (err) {
-      setToast({ message: 'Failed to apply AI action.', type: 'error' });
+      setToast({ message: 'Action failed: Protocol error.', type: 'error' });
     } finally {
       setIsApplyingAction(false);
     }
@@ -77,9 +100,9 @@ export default function GeneratorPage() {
       };
       const response = await emailService.saveEmail(savePayload);
       setEmail(prev => ({ ...prev, id: response.data.id }));
-      setToast({ message: 'Email saved to history!', type: 'success' });
+      setToast({ message: 'Email saved into History.', type: 'success' });
     } catch (err) {
-      setToast({ message: 'Failed to save email.', type: 'error' });
+      setToast({ message: 'Failed to write to database.', type: 'error' });
     } finally {
       setIsSaving(false);
     }
@@ -93,44 +116,64 @@ export default function GeneratorPage() {
     }
     
     try {
-      await emailService.toggleFavorite(email.id);
+      await emailService.toggleFavorite(email.id, !email.isFavorite);
       setEmail(prev => ({ ...prev, isFavorite: !prev.isFavorite }));
     } catch (err) {
-      setToast({ message: 'Failed to update favorite status.', type: 'error' });
+      setToast({ message: 'Failed to update priority flag.', type: 'error' });
     }
   };
 
   return (
-    <div className="max-w-7xl mx-auto space-y-6 h-full flex flex-col">
+    <div className="max-w-7xl mx-auto space-y-8 flex flex-col relative h-full min-h-[calc(100vh-8rem)]">
       <PageHeader 
-        title="Email Generator" 
-        description="Craft professional emails instantly using AI."
+        title="AI Generator" 
+        subtitle="Initialize neural email synthesis."
       />
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 flex-1 min-h-0">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 flex-1">
         {/* Left Column: Form */}
-        <div className="lg:col-span-4 bg-warm-primary dark:bg-warm-primary rounded-xl shadow-sm border border-editorial-border dark:border-editorial-border p-6 overflow-y-auto">
-          <h2 className="text-lg font-bold text-editorial-primary dark:text-editorial-primary mb-4">
-            Email Parameters
+        <div className="lg:col-span-4 bg-white/80 dark:bg-[#0a0a0a]/80 backdrop-blur-md rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.05)] dark:shadow-glass border border-black/10 dark:border-white/10 p-6 hover:border-brand/30 transition-colors duration-500 relative group">
+          <div className="absolute inset-0 bg-brand/5 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
+          <h2 className="text-lg font-display font-bold text-gray-900 dark:text-white mb-6 uppercase tracking-widest flex items-center gap-2">
+            <Terminal className="h-5 w-5 text-brand" /> Input Parameters
           </h2>
-          <EmailForm 
-            onSubmit={handleGenerate} 
-            isLoading={isGenerating || isApplyingAction}
-            defaultValues={currentFormData}
-          />
+          <div className="relative z-10">
+            {isProfileLoading ? (
+              <div className="animate-pulse space-y-4">
+                <div className="h-24 bg-black/5 dark:bg-white/5 rounded-xl"></div>
+                <div className="h-12 bg-black/5 dark:bg-white/5 rounded-xl"></div>
+                <div className="h-12 bg-black/5 dark:bg-white/5 rounded-xl"></div>
+              </div>
+            ) : (
+              <EmailForm 
+                onSubmit={handleGenerate} 
+                isLoading={isGenerating || isApplyingAction}
+                defaultValues={currentFormData}
+              />
+            )}
+          </div>
         </div>
 
         {/* Right Column: Preview */}
-        <div className="lg:col-span-8 flex flex-col">
-          <EmailPreview 
-            email={email}
-            isLoading={isGenerating || isApplyingAction}
-            isSaving={isSaving}
-            onAction={handleAction}
-            onRegenerate={() => currentFormData && handleGenerate(currentFormData)}
-            onSave={handleSave}
-            onToggleFavorite={handleToggleFavorite}
-          />
+        <div className="lg:col-span-8 flex flex-col bg-white/80 dark:bg-[#0a0a0a]/80 backdrop-blur-md rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.05)] dark:shadow-glass border border-black/10 dark:border-white/10 overflow-hidden hover:border-brand/30 transition-colors duration-500 relative group h-full min-h-[500px]">
+          <div className="absolute inset-0 bg-brand/5 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
+          
+          <div className="p-4 border-b border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 flex items-center gap-2 relative z-10">
+            <Code2 className="h-5 w-5 text-brand" />
+            <h2 className="text-sm font-mono text-text-secondary uppercase tracking-widest">Output Terminal</h2>
+          </div>
+          
+          <div className="flex-1 p-6 relative z-10 h-full">
+            <EmailPreview 
+              email={email}
+              isLoading={isGenerating || isApplyingAction}
+              isSaving={isSaving}
+              onAction={handleAction}
+              onRegenerate={() => currentFormData && handleGenerate(currentFormData)}
+              onSave={handleSave}
+              onToggleFavorite={handleToggleFavorite}
+            />
+          </div>
         </div>
       </div>
 

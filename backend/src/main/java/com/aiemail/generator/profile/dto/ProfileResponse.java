@@ -19,7 +19,6 @@ public class ProfileResponse {
     private UUID id;
     private String email;
     private String fullName;
-    private String profilePictureUrl;
     private String role;
     private Tone defaultTone;
     private Language defaultLanguage;

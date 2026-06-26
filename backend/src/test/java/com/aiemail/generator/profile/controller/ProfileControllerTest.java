@@ -112,12 +112,10 @@ class ProfileControllerTest {
     void testUpdateProfileSuccess() throws Exception {
         UpdateProfileRequest request = UpdateProfileRequest.builder()
                 .fullName("Jane Doe")
-                .profilePictureUrl("http://image.com/pic.jpg")
                 .build();
 
         ProfileResponse response = ProfileResponse.builder()
                 .fullName("Jane Doe")
-                .profilePictureUrl("http://image.com/pic.jpg")
                 .build();
 
         when(profileService.updateProfile(any(UpdateProfileRequest.class), any(UserEntity.class))).thenReturn(response);
@@ -128,8 +126,7 @@ class ProfileControllerTest {
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
-                .andExpect(jsonPath("$.data.fullName").value("Jane Doe"))
-                .andExpect(jsonPath("$.data.profilePictureUrl").value("http://image.com/pic.jpg"));
+                .andExpect(jsonPath("$.data.fullName").value("Jane Doe"));
     }
 
     @Test

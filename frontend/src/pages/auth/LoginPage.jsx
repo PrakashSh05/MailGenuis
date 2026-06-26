@@ -60,7 +60,7 @@ export default function LoginPage() {
         <div className="text-center mb-8">
           <div className="inline-flex items-center gap-2 text-brand-600 dark:text-brand-400 mb-2">
             <Mail className="h-8 w-8" />
-            <span className="text-2xl font-black tracking-tight select-none">MailGenius AI</span>
+            <span className="text-2xl font-black tracking-tight select-none">Mail-Genius AI</span>
           </div>
           <p className="text-sm text-editorial-secondary dark:text-editorial-secondary font-medium">
             AI-powered email generation for everyone

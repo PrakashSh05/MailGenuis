@@ -78,7 +78,7 @@ public class DashboardServiceImpl implements DashboardService {
                 .trend(weeklyEmails > 0 ? "+" + weeklyEmails : "neutral")
                 .build());
 
-        long favoriteEmails = emailRepository.countByUserAndIsFavorite(user, true);
+        long favoriteEmails = emailRepository.countByUserAndFavorite(user, true);
         cards.add(StatisticsCard.builder()
                 .title("Favorite Emails")
                 .value(String.valueOf(favoriteEmails))

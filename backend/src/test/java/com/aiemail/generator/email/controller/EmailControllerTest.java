@@ -128,7 +128,7 @@ class EmailControllerTest {
                 .language(Language.ENGLISH)
                 .subject("Leave request")
                 .body("Dear HR, I need leave.")
-                .isFavorite(false)
+                .favorite(false)
                 .build();
 
         EmailResponse response = EmailResponse.builder()
@@ -156,7 +156,7 @@ class EmailControllerTest {
                 .items(Collections.singletonList(EmailSummaryResponse.builder()
                         .id(UUID.randomUUID())
                         .subject("Subject")
-                        .isFavorite(false)
+                        .favorite(false)
                         .build()))
                 .currentPage(0)
                 .pageSize(10)

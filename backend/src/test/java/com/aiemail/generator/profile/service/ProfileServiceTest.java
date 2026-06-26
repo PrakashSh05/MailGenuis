@@ -60,8 +60,7 @@ class ProfileServiceTest {
     @Test
     void updateProfile_success() {
         UpdateProfileRequest request = new UpdateProfileRequest();
-        request.setFullName("New Name");
-        request.setProfilePictureUrl("https://example.com/avatar.jpg");
+        request.setFullName("Updated Name");
 
         when(userRepository.save(any())).thenReturn(user);
         when(profileMapper.userEntityToProfileResponse(any())).thenReturn(profileResponse);

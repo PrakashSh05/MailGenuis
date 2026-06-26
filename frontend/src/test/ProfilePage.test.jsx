@@ -16,8 +16,7 @@ describe('ProfilePage', () => {
     profileService.getProfile.mockResolvedValue({
       data: {
         fullName: 'Jane Doe',
-        email: 'jane@example.com',
-        profilePictureUrl: ''
+        email: 'jane@example.com'
       }
     });
 

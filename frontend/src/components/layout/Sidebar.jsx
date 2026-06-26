@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, Sparkles, History, FileText, Settings, User, Mail, X } from 'lucide-react';
+import { LayoutDashboard, Sparkles, History, FileText, Settings, User, Mail, X, Zap } from 'lucide-react';
 
 export default function Sidebar({ isOpen, onClose }) {
   const menuItems = [
@@ -18,25 +18,28 @@ export default function Sidebar({ isOpen, onClose }) {
       {isOpen && (
         <div 
           onClick={onClose}
-          className="fixed inset-0 z-40 bg-warm-primary/60 backdrop-blur-sm md:hidden"
+          className="fixed inset-0 z-40 bg-black/80 backdrop-blur-sm md:hidden"
         />
       )}
 
       {/* Sidebar Container */}
-      <aside className={`fixed top-0 bottom-0 left-0 z-50 w-64 border-r border-editorial-border dark:border-editorial-border bg-warm-primary dark:bg-warm-primary transition-transform duration-300 md:translate-x-0 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+      <aside className={`fixed top-0 bottom-0 left-0 z-50 w-64 md:w-60 md:m-4 md:rounded-2xl border-r md:border border-border bg-white/90 dark:bg-[#0a0a0a]/90 backdrop-blur-xl shadow-glass transition-transform duration-300 md:translate-x-0 flex flex-col ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+        
         {/* Title / Logo */}
-        <div className="h-16 border-b border-editorial-border dark:border-editorial-border px-6 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Mail className="h-6 w-6 text-brand-500" />
-            <span className="font-bold text-editorial-primary dark:text-editorial-primary tracking-tight">MailGenius AI</span>
+        <div className="h-20 border-b border-border/50 px-6 flex items-center justify-between shrink-0">
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-xl bg-brand/10 border border-brand/20 shadow-glow-orange">
+              <Zap className="h-5 w-5 text-brand" />
+            </div>
+            <span className="font-display font-bold text-xl text-gray-900 dark:text-white tracking-widest uppercase whitespace-nowrap">Mail-Genius</span>
           </div>
-          <button onClick={onClose} className="md:hidden text-editorial-secondary dark:text-editorial-secondary p-1.5 hover:bg-warm-secondary dark:hover:bg-slate-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500" aria-label="Close Sidebar">
-            <X className="h-5 w-5" />
+          <button onClick={onClose} className="md:hidden text-text-secondary p-1.5 hover:text-brand rounded-lg transition-colors" aria-label="Close Sidebar">
+            <X className="h-6 w-6" />
           </button>
         </div>
 
         {/* Menu Navigation */}
-        <nav className="p-4 space-y-1.5">
+        <nav className="p-4 space-y-2 overflow-y-auto flex-1">
           {menuItems.map((item) => {
             const Icon = item.icon;
             return (
@@ -44,18 +47,33 @@ export default function Sidebar({ isOpen, onClose }) {
                 key={item.name}
                 to={item.path}
                 onClick={onClose}
-                className={({ isActive }) => `flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all focus:outline-none focus:ring-2 focus:ring-brand-500 ${
+                className={({ isActive }) => `flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300 relative overflow-hidden group hover:scale-[1.02] hover:translate-x-1 ${
                   isActive 
-                    ? 'bg-brand-50 dark:bg-brand-950/40 text-brand-600 dark:text-brand-400' 
-                    : 'text-editorial-secondary dark:text-editorial-secondary hover:bg-warm-secondary dark:hover:bg-slate-850 hover:text-slate-950 dark:hover:text-editorial-primary'
+                    ? 'text-brand bg-brand/10 border border-brand/30 shadow-[inset_0_0_20px_rgba(255,87,34,0.1)]' 
+                    : 'text-text-secondary hover:text-gray-900 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5 border border-transparent hover:border-black/10 dark:hover:border-white/10'
                 }`}
               >
-                <Icon className="h-5 w-5" />
-                {item.name}
+                {({ isActive }) => (
+                  <>
+                    <Icon className={`h-5 w-5 transition-colors duration-300 ${isActive ? 'text-brand' : 'group-hover:text-gray-900 dark:group-hover:text-white'}`} />
+                    <span className="relative z-10">{item.name}</span>
+                    {isActive && (
+                      <div className="absolute left-0 top-0 bottom-0 w-1 bg-brand shadow-glow-orange"></div>
+                    )}
+                  </>
+                )}
               </NavLink>
             );
           })}
         </nav>
+        
+        {/* Futuristic bottom accent */}
+        <div className="p-4 border-t border-border/50">
+          <div className="px-4 py-3 rounded-xl bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/5 flex items-center gap-3">
+            <div className="h-2 w-2 rounded-full bg-success shadow-[0_0_10px_rgba(74,222,128,0.8)] animate-pulse"></div>
+            <span className="text-xs font-mono text-text-secondary uppercase tracking-wider">System Online</span>
+          </div>
+        </div>
       </aside>
     </>
   );

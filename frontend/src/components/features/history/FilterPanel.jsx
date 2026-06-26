@@ -2,15 +2,15 @@ import React from 'react';
 
 const TONES = ['PROFESSIONAL', 'CASUAL', 'FRIENDLY', 'PERSUASIVE', 'URGENT', 'EMPATHETIC'];
 
-export default function FilterPanel({ activeFilter, onFilterChange }) {
+export default function FilterPanel({ activeFilter, onFilterChange, showFavorites = true }) {
   return (
     <div className="flex flex-wrap gap-2 mb-4">
       <button
         onClick={() => onFilterChange('')}
         className={`px-3 py-1 text-xs font-medium rounded-full transition-colors ${
           activeFilter === '' 
-            ? 'bg-slate-800 text-editorial-primary dark:bg-slate-200 dark:text-editorial-primary' 
-            : 'bg-warm-secondary text-editorial-secondary hover:bg-slate-200 dark:bg-slate-800 dark:text-editorial-secondary dark:hover:bg-slate-700'
+            ? 'bg-gray-900 text-white dark:bg-white dark:text-black' 
+            : 'bg-black/5 text-gray-600 hover:bg-black/10 dark:bg-white/5 dark:text-gray-400 dark:hover:bg-white/10'
         }`}
       >
         All
@@ -21,23 +21,25 @@ export default function FilterPanel({ activeFilter, onFilterChange }) {
           onClick={() => onFilterChange(tone)}
           className={`px-3 py-1 text-xs font-medium rounded-full transition-colors ${
             activeFilter === tone 
-              ? 'bg-brand-600 text-editorial-primary dark:bg-brand-500 dark:text-editorial-primary' 
-              : 'bg-warm-secondary text-editorial-secondary hover:bg-slate-200 dark:bg-slate-800 dark:text-editorial-secondary dark:hover:bg-slate-700'
+              ? 'bg-brand text-black dark:bg-brand dark:text-black' 
+              : 'bg-black/5 text-gray-600 hover:bg-black/10 dark:bg-white/5 dark:text-gray-400 dark:hover:bg-white/10'
           }`}
         >
           {tone}
         </button>
       ))}
-      <button
-        onClick={() => onFilterChange('FAVORITES')}
-        className={`px-3 py-1 text-xs font-medium rounded-full transition-colors ${
-          activeFilter === 'FAVORITES' 
-            ? 'bg-yellow-500 text-editorial-primary' 
-            : 'bg-warm-secondary text-editorial-secondary hover:bg-slate-200 dark:bg-slate-800 dark:text-editorial-secondary dark:hover:bg-slate-700'
-        }`}
-      >
-        ★ Favorites
-      </button>
+      {showFavorites && (
+        <button
+          onClick={() => onFilterChange('FAVORITES')}
+          className={`px-3 py-1 text-xs font-medium rounded-full transition-colors ${
+            activeFilter === 'FAVORITES' 
+              ? 'bg-yellow-500 text-black dark:bg-yellow-500 dark:text-black' 
+              : 'bg-black/5 text-gray-600 hover:bg-black/10 dark:bg-white/5 dark:text-gray-400 dark:hover:bg-white/10'
+          }`}
+        >
+          ★ Favorites
+        </button>
+      )}
     </div>
   );
 }

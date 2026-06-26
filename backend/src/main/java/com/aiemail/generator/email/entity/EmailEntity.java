@@ -89,7 +89,7 @@ public class EmailEntity {
 
     @Column(name = "is_favorite", nullable = false)
     @Builder.Default
-    private boolean isFavorite = false;
+    private boolean favorite = false;
 
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
