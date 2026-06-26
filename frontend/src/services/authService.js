@@ -28,7 +28,7 @@ export const authService = {
 
   getCurrentUser: () => {
     try {
-      const user = localStorage.getItem('user');
+      const user = sessionStorage.getItem('user');
       return user ? JSON.parse(user) : null;
     } catch {
       return null;

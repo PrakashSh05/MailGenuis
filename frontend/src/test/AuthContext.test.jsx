@@ -19,7 +19,7 @@ function AuthTestComponent() {
 
 describe('AuthContext', () => {
   beforeEach(() => {
-    localStorage.clear();
+    sessionStorage.clear();
     vi.useFakeTimers();
   });
 
@@ -54,11 +54,11 @@ describe('AuthContext', () => {
 
     expect(screen.getByTestId('auth-status')).toHaveTextContent('logged-in');
     expect(screen.getByTestId('username')).toHaveTextContent('Alice');
-    expect(localStorage.getItem('token')).toBe('mock.token.exp');
+    expect(sessionStorage.getItem('token')).toBe('mock.token.exp');
 
     fireEvent.click(screen.getByTestId('logout-btn'));
 
     expect(screen.getByTestId('auth-status')).toHaveTextContent('logged-out');
-    expect(localStorage.getItem('token')).toBeNull();
+    expect(sessionStorage.getItem('token')).toBeNull();
   });
 });

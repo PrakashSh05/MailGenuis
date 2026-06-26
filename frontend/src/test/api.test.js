@@ -3,11 +3,11 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 
 describe('Axios Client & Interceptors', () => {
   beforeEach(() => {
-    localStorage.clear();
+    sessionStorage.clear();
   });
 
-  it('injects Bearer token from localStorage in request headers', async () => {
-    localStorage.setItem('token', 'mock_jwt_token');
+  it('injects Bearer token from sessionStorage in request headers', async () => {
+    sessionStorage.setItem('token', 'mock_jwt_token');
 
     const reqInterceptor = api.interceptors.request.handlers[0];
     const config = await reqInterceptor.fulfilled({ headers: {} });

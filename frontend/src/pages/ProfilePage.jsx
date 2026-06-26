@@ -89,7 +89,7 @@ export default function ProfilePage() {
       
       // Update global auth context so navbar avatar reflects changes immediately
       if (user) {
-        login(localStorage.getItem('token'), {
+        login(sessionStorage.getItem('token'), {
           ...user,
           name: res.data.fullName
         });
